@@ -1,7 +1,7 @@
 # Личный проект «Угадай мелодию» [![Build status][travis-image]][travis-url]
 
 * Студент: [Александр Русак](https://up.htmlacademy.ru/ecmascript/3/user/74479).
-* Наставник: `Неизвестно`.
+* Наставник: [Кирилл Пензин](https://htmlacademy.ru/profile/id91821).
 
 ---
 
