@@ -1,17 +1,21 @@
+import {welcome as welcomeElement} from './templates/welcome';
+
 class App {
   constructor() {
-    this.APP = document.querySelector(`.app`);
-    this.TEMPLATE = document.querySelector(`#templates`);
-    this.SCREEN = [...this.TEMPLATE.content.querySelectorAll(`section.main`)];
-    this.STEP = 0;
+    this.appElement = document.querySelector(`.app`);
+    this.templateElement = document.querySelector(`#templates`);
+    // this.views = [...this.templateElement.content.querySelectorAll(`section.main`)];
+    this.views = [];
+    this.step = 0;
     this.isAltPressed = false;
     this.init();
   }
 
   init() {
-    this.screen = this.STEP;
-    document.addEventListener(`keydown`, this.keyDownHandler.bind(this));
-    document.addEventListener(`keyup`, this.keyUpHandler.bind(this));
+    this.views.push(welcomeElement);
+    this.screen = this.step;
+    // document.addEventListener(`keydown`, this.keyDownHandler.bind(this));
+    // document.addEventListener(`keyup`, this.keyUpHandler.bind(this));
   }
 
   get screen() {
@@ -19,19 +23,19 @@ class App {
   }
 
   set screen(index) {
-    this.APP.replaceChild(this.SCREEN[index].cloneNode(true), this.screen);
+    this.appElement.replaceChild(this.views[index].cloneNode(true), this.screen);
   }
 
   keyDownHandler(evt) {
     if (this.isAltPressed) {
-      if (evt.keyCode === 39 && this.STEP < this.SCREEN.length - 2) {
-        this.STEP++;
+      if (evt.keyCode === 39 && this.step < this.views.length - 2) {
+        this.step++;
       }
-      if (evt.keyCode === 37 && this.STEP > 0) {
-        this.STEP--;
+      if (evt.keyCode === 37 && this.step > 0) {
+        this.step--;
       }
       event.preventDefault();
-      this.screen = this.STEP;
+      this.screen = this.step;
     }
     if (evt.keyCode === 18) {
       this.isAltPressed = true;
