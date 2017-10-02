@@ -1,4 +1,6 @@
-export const resultTry = `
+import createElement from '../element-from-template';
+
+export const resultTry = createElement`
   <section class="main main--result">
     <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
 

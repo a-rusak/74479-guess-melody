@@ -1,4 +1,6 @@
-export const levelGenre = `
+import createElement from '../element-from-template';
+
+export const levelGenre = createElement`
   <section class="main main--level main--level-genre">
   <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
     <circle

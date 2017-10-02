@@ -1,6 +1,6 @@
-import getElementFromTemplate from '../get-element-from-template';
+import createElement from '../element-from-template';
 
-export const welcome = getElementFromTemplate(`
+export const welcome = createElement`
   <section class="main main--welcome">
     <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
     <button class="main-play">Начать игру</button>
@@ -11,4 +11,4 @@ export const welcome = getElementFromTemplate(`
       Удачи!
     </p>
   </section>
-`);
+`;
