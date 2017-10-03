@@ -46,6 +46,12 @@ export default class View {
       if (evt.target.classList.contains(`main-answer`)) {
         this.index = 2;
       }
+      if (evt.target.classList.contains(`genre-answer-send`)) {
+        this.index = parseInt(Math.random() * 3, 10) + 3;
+      }
+      if (evt.target.classList.contains(`main-replay`)) {
+        this.index = 0;
+      }
     }
     this.screen = this.templates[this.index];
   }

@@ -1,5 +1,45 @@
 import createElement from '../element-from-template';
 
+class View {
+  constructor(view) {
+    this.view = view;
+  }
+
+  init() {
+    this.button = this.view.querySelector(`.genre-answer-send`);
+    this.form = this.view.querySelector(`.genre`);
+    this.checkboxes = [...this.view.querySelectorAll(`.genre-answer [type="checkbox"]`)];
+    for (let checkbox of this.checkboxes) {
+      checkbox.addEventListener(`change`, this._checkBoxHandler.bind(this));
+    }
+    this._updateButtonState();
+    this.button.addEventListener(`click`, () => {
+      this.form.reset();
+    });
+  }
+
+  _updateButtonState() {
+    let isNothingSelected = true;
+
+    for (let checkbox of this.checkboxes) {
+      if (checkbox.checked) {
+        isNothingSelected = false;
+        break;
+      }
+    }
+    if (isNothingSelected) {
+      this.button.setAttribute(`disabled`, `disabled`);
+    } else {
+      this.button.removeAttribute(`disabled`);
+    }
+  }
+
+  _checkBoxHandler() {
+    this._updateButtonState();
+  }
+
+}
+
 export const levelGenre = createElement`
   <section class="main main--level main--level-genre">
   <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
@@ -84,3 +124,6 @@ export const levelGenre = createElement`
   </div>
   </section>
 `;
+
+const view = new View(levelGenre);
+view.init();
