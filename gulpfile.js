@@ -13,6 +13,7 @@ const rename = require('gulp-rename');
 const imagemin = require('gulp-imagemin');
 const rollup = require('gulp-better-rollup');
 const sourcemaps = require('gulp-sourcemaps');
+const mocha = require('gulp-mocha');
 
 gulp.task('style', function () {
   return gulp.src('sass/style.scss')
