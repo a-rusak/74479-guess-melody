@@ -63,6 +63,7 @@ $preview-spacing: 11px;
   margin-bottom: $preview-spacing;
   overflow: hidden;
   width: $preview-size;
+  pointer-events: none;
 }
 
 @import "genre";
