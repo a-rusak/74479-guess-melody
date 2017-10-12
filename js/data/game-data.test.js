@@ -1,88 +1,121 @@
 import assert from "assert";
-import {resultsCount, MAX_ERRORS_COUNT} from "./game.data";
+import {
+  QUESTIONS_COUNT,
+  MAX_ERRORS_COUNT,
+  getScore,
+  printResult
+} from "./game.data";
 
-const results = [
-  {
-    attempt: [1, 2, -2],
-    rest: 3,
-    ponts: -1
-  },
-  {
-    attempt: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    rest: 4,
-    ponts: 10
-  },
-  {
-    attempt: [1, 1, 1, 1, 1, 1, -2, 1, 1, -2],
-    rest: 2,
-    ponts: 4
-  },
-  {
-    attempt: [-2, -2, -2, -2],
-    rest: 0,
-    ponts: -1
-  },
-  {
-    attempt: [],
-    rest: 4,
-    ponts: -1
-  }
-];
-
-const statistics = [4, 5, 8, 10, 11];
 const games = [
   {
-    points: -1,
-    rest: 0,
-    timeLeft: 200
-  },
-  {
-    points: -1,
+    answers: [
+      {isCorrect: true, timeSpent: 40},
+      {isCorrect: true, timeSpent: 20},
+      {isCorrect: false, timeSpent: 10},
+    ],
     rest: 3,
-    timeLeft: 0
+    points: -1
   },
   {
-    points: 10,
+    answers: [
+      {isCorrect: true, timeSpent: 40},
+      {isCorrect: true, timeSpent: 40},
+      {isCorrect: true, timeSpent: 40},
+      {isCorrect: true, timeSpent: 40},
+      {isCorrect: true, timeSpent: 40},
+      {isCorrect: true, timeSpent: 40},
+      {isCorrect: true, timeSpent: 40},
+      {isCorrect: true, timeSpent: 40},
+      {isCorrect: true, timeSpent: 40},
+      {isCorrect: true, timeSpent: 40}
+    ],
     rest: 4,
-    timeLeft: 100
+    points: 10
+  },
+  {
+    answers: [
+      {isCorrect: true, timeSpent: 60},
+      {isCorrect: true, timeSpent: 60},
+      {isCorrect: true, timeSpent: 60},
+      {isCorrect: true, timeSpent: 60},
+      {isCorrect: true, timeSpent: 60},
+      {isCorrect: true, timeSpent: 40},
+      {isCorrect: false, timeSpent: 50},
+      {isCorrect: true, timeSpent: 40},
+      {isCorrect: true, timeSpent: 40},
+      {isCorrect: false, timeSpent: 40}
+    ],
+    rest: 2,
+    points: 4
+  },
+  {
+    answers: [
+      {isCorrect: false, timeSpent: 10},
+      {isCorrect: false, timeSpent: 10},
+      {isCorrect: false, timeSpent: 10},
+      {isCorrect: false, timeSpent: 10}
+    ],
+    rest: 0,
+    points: -1
+  },
+  {
+    answers: [],
+    rest: 4,
+    points: -1
   }
 ];
 
-const text = testData => `
-  Игрок отвечал на ${testData.attempt.length} вопрос(ов|а).
+const gamesToPlaceInScoreboard = [
+  {
+    answers: [
+      {isCorrect: true, timeSpent: 40},
+      {isCorrect: false, timeSpent: 20},
+      {isCorrect: false, timeSpent: 10},
+    ],
+    rest: 3,
+    result: `Время вышло! Вы не успели отгадать все мелодии`
+  },
+  {
+    answers: [
+      {isCorrect: true, timeSpent: 100},
+      {isCorrect: false, timeSpent: 10},
+      {isCorrect: false, timeSpent: 10},
+      {isCorrect: false, timeSpent: 10},
+      {isCorrect: false, timeSpent: 10}
+    ],
+    rest: 0,
+    result: `У вас закончились все попытки. Ничего, повезёт в следующий раз!`
+  },
+];
+
+const text = (testData) => `
+  Игрок отвечал на ${testData.answers.length} вопрос(ов|а) из ${QUESTIONS_COUNT} вопросов.
   Сделал ${MAX_ERRORS_COUNT - testData.rest} ошиб(ки|ок|ку).
-  ${testData.ponts === -1
+  ${testData.points === -1
     ? `и проиграл`
-    : `и набрал ${testData.ponts} балл(ов|а)`}
+    : `и набрал ${testData.points} балл(ов|а)`}
 `;
 
-const phrases = {
-  timeIsUp: () => `Время вышло! Вы не успели отгадать все мелодии`,
-  noMoreAttempts: () =>
-    `У вас закончились все попытки. Ничего, повезёт в следующий раз!`,
-  win: ({place, playersCount, betterThan}) =>
-    `Вы заняли ${place}-ое место из ${playersCount} игроков. Это лучше чем у ${betterThan} игроков`
-};
-
 describe(`Результаты игр`, () => {
-  describe(`Функция подсчёта набранных баллов игрока`, () => {
-    for (let result of results) {
-      makeTest(result);
-    }
-    function makeTest(result) {
-      it(text(result), () => {
-        assert.equal(result.ponts, resultsCount(result));
-      });
-    }
-  });
-
-  describe(`Функция вывода результата игрока`, () => {
+  /* describe(`Функция подсчёта набранных баллов игрока`, () => {
     for (let game of games) {
       makeTest(game);
     }
     function makeTest(game) {
-      it(text(result), () => {
-        assert.equal(result.ponts, resultsCount(result));
+      it(text(game), () => {
+        assert.equal(game.points, getScore(game));
+      });
+    }
+  }); */
+
+  describe(`Функция вывода результата игрока`, () => {
+    for (let game of gamesToPlaceInScoreboard) {
+      makeTest(game);
+    }
+    function makeTest(game) {
+      it(game.result, () => {
+        assert.equal(game.result,
+            printResult(gamesToPlaceInScoreboard, game));
       });
     }
   });
