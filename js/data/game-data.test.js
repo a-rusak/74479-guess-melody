@@ -1,92 +1,16 @@
-import assert from "assert";
+import assert from 'assert';
 import {
   QUESTIONS_COUNT,
   MAX_ERRORS_COUNT,
   getScore,
-  printResult
-} from "./game.data";
-
-const games = [
-  {
-    answers: [
-      {isCorrect: true, timeSpent: 40},
-      {isCorrect: true, timeSpent: 20},
-      {isCorrect: false, timeSpent: 10},
-    ],
-    rest: 3,
-    points: -1
-  },
-  {
-    answers: [
-      {isCorrect: true, timeSpent: 40},
-      {isCorrect: true, timeSpent: 40},
-      {isCorrect: true, timeSpent: 40},
-      {isCorrect: true, timeSpent: 40},
-      {isCorrect: true, timeSpent: 40},
-      {isCorrect: true, timeSpent: 40},
-      {isCorrect: true, timeSpent: 40},
-      {isCorrect: true, timeSpent: 40},
-      {isCorrect: true, timeSpent: 40},
-      {isCorrect: true, timeSpent: 40}
-    ],
-    rest: 4,
-    points: 10
-  },
-  {
-    answers: [
-      {isCorrect: true, timeSpent: 60},
-      {isCorrect: true, timeSpent: 60},
-      {isCorrect: true, timeSpent: 60},
-      {isCorrect: true, timeSpent: 60},
-      {isCorrect: true, timeSpent: 60},
-      {isCorrect: true, timeSpent: 40},
-      {isCorrect: false, timeSpent: 50},
-      {isCorrect: true, timeSpent: 40},
-      {isCorrect: true, timeSpent: 40},
-      {isCorrect: false, timeSpent: 40}
-    ],
-    rest: 2,
-    points: 4
-  },
-  {
-    answers: [
-      {isCorrect: false, timeSpent: 10},
-      {isCorrect: false, timeSpent: 10},
-      {isCorrect: false, timeSpent: 10},
-      {isCorrect: false, timeSpent: 10}
-    ],
-    rest: 0,
-    points: -1
-  },
-  {
-    answers: [],
-    rest: 4,
-    points: -1
-  }
-];
-
-const gamesToPlaceInScoreboard = [
-  {
-    answers: [
-      {isCorrect: true, timeSpent: 40},
-      {isCorrect: false, timeSpent: 20},
-      {isCorrect: false, timeSpent: 10},
-    ],
-    rest: 3,
-    result: `Время вышло! Вы не успели отгадать все мелодии`
-  },
-  {
-    answers: [
-      {isCorrect: true, timeSpent: 100},
-      {isCorrect: false, timeSpent: 10},
-      {isCorrect: false, timeSpent: 10},
-      {isCorrect: false, timeSpent: 10},
-      {isCorrect: false, timeSpent: 10}
-    ],
-    rest: 0,
-    result: `У вас закончились все попытки. Ничего, повезёт в следующий раз!`
-  },
-];
+  printResult,
+  Timer
+} from './game.data';
+import {
+  games,
+  gamesToPlaceInScoreboard,
+  gamesToTestInScoreboard
+} from './game-data.mock';
 
 const text = (testData) => `
   Игрок отвечал на ${testData.answers.length} вопрос(ов|а) из ${QUESTIONS_COUNT} вопросов.
@@ -97,7 +21,7 @@ const text = (testData) => `
 `;
 
 describe(`Результаты игр`, () => {
-  /* describe(`Функция подсчёта набранных баллов игрока`, () => {
+  describe(`Функция подсчёта набранных баллов игрока`, () => {
     for (let game of games) {
       makeTest(game);
     }
@@ -106,16 +30,37 @@ describe(`Результаты игр`, () => {
         assert.equal(game.points, getScore(game));
       });
     }
-  }); */
+  });
 
   describe(`Функция вывода результата игрока`, () => {
-    for (let game of gamesToPlaceInScoreboard) {
+    for (let game of gamesToTestInScoreboard) {
       makeTest(game);
     }
     function makeTest(game) {
       it(game.result, () => {
         assert.equal(game.result,
             printResult(gamesToPlaceInScoreboard, game));
+      });
+    }
+  });
+
+  const TIME = 4;
+  const timer = new Timer(TIME);
+
+  describe(`Таймер в 5 щелчков`, () => {
+    for (let t of [4, 3, 2, 1, 0]) {
+      makeTest(t);
+    }
+    function makeTest(t) {
+      it(`Щелчок №${t + 1}: `, () => {
+        assert.equal(t, timer.time);
+        if (t > 0) {
+          assert(!timer.isFinished);
+        }
+        if (t === 0) {
+          assert(timer.isFinished);
+        }
+        timer.tick();
       });
     }
   });
