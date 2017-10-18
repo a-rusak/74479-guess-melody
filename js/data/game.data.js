@@ -12,14 +12,14 @@ const phrases = {
 
 // const PRICE_OF_ERROR = 2;
 // const sum = (it) => it.reduce((acc, item) => acc + item);
-// const penalty = (rest) => (MAX_ERRORS_COUNT - rest) * PRICE_OF_ERROR;
+// const penalty = (remainingAttempts) => (MAX_ERRORS_COUNT - remainingAttempts) * PRICE_OF_ERROR;
 
-// const getScore = ({answers, rest}) => {
+// const getScore = ({answers, remainingAttempts}) => {
 const getScore = ({answers}) => {
   let score = -1;
 
   if (answers.length === QUESTIONS_COUNT) {
-    // result = sum(attempt) - penalty(rest);
+    // result = sum(attempt) - penalty(remainingAttempts);
     // result = sum(answers);
 
     score = answers
@@ -39,34 +39,21 @@ const getScore = ({answers}) => {
   return score;
 };
 
-const getStatistics = (games) => {
-  return games
-      .map((game) => getScore(game))
-      .sort((a, b) => b - a);
-};
-
-const printResult = (games, game) => {
-  const score = getScore(game);
-
-  if (score < 0) {
-    if (game.rest < 0) {
-      return phrases.noMoreAttempts();
-    } else {
-      return phrases.timeIsUp();
-    }
-  }
-  let statistics = getStatistics(games);
+const getPosition = (statistics, score) => {
+  // создаём из таблицы результатов, массив объектов: { position, score }
   const statisticsIndexed = statistics
       .map((scoreFromStaticstics, position) => ({
         position,
         score: scoreFromStaticstics
       }));
 
+  // кладём в таблицу результат новой игры
   statisticsIndexed.push({
     position: null,
     score
   });
 
+  // получаем позицию новой игры в таблице результатов
   const position = statisticsIndexed
       .sort((a, b) => b.score - a.score)
       .reduce((acc, it, index) => {
@@ -76,8 +63,28 @@ const printResult = (games, game) => {
         return acc;
       }, -1);
 
-  games.push(game);
-  statistics = getStatistics(games);
+  if (position === -1) {
+    throw new Error(`Can't define position in Scoreboard`);
+  }
+  return position;
+};
+
+const printResult = (statistics, game) => {
+  const score = getScore(game);
+
+  // проигрыш
+  if (score < 0) {
+    if (game.remainingAttempts < 0) {
+      return phrases.noMoreAttempts();
+    } else {
+      return phrases.timeIsUp();
+    }
+  }
+
+  // выйгрыш
+  const position = getPosition(statistics, score);
+  statistics.push(score);
+  statistics.sort((a, b) => b - a);
 
   const stats = {
     place: position + 1,
@@ -88,21 +95,26 @@ const printResult = (games, game) => {
 };
 
 class Timer {
-  constructor(count) {
-    this.time = count;
-    this.isFinished = false;
+  constructor(time) {
+    this.time = time;
+  }
+
+  get isFinished() {
+    return this.time < 1;
+  }
+
+  get time() {
+    return this._time;
+  }
+
+  set time(value) {
+    this._time = value;
   }
 
   tick() {
-    if (!this.isFinished) {
-      this.time--;
-      if (this.time === 0) {
-        this.isFinished = true;
-      }
-    }
+    this.time--;
   }
 }
-
 
 export {
   QUESTIONS_COUNT,
