@@ -94,7 +94,7 @@ export const gamesToTestInScoreboard = [
       {isCorrect: true, timeSpent: 100},
       {isCorrect: true, timeSpent: 100}
     ],
-    remainingAttempts: 4,
+    remainingAttempts: 3,
     result: `Вы заняли 2-ое место из 4 игроков. Это лучше чем у 50% игроков`
   },
   {
@@ -110,7 +110,7 @@ export const gamesToTestInScoreboard = [
       {isCorrect: true, timeSpent: 100},
       {isCorrect: true, timeSpent: 100}
     ],
-    remainingAttempts: 4,
+    remainingAttempts: 3,
     result: `Вы заняли 2-ое место из 5 игроков. Это лучше чем у 60% игроков`
   },
   {
@@ -128,5 +128,21 @@ export const gamesToTestInScoreboard = [
     ],
     remainingAttempts: 0,
     result: `Вы заняли 6-ое место из 6 игроков. Это лучше чем у 0% игроков`
+  },
+  {
+    answers: [
+      {isCorrect: true, timeSpent: 100},
+      {isCorrect: true, timeSpent: 100},
+      {isCorrect: true, timeSpent: 100},
+      {isCorrect: true, timeSpent: 100},
+      {isCorrect: true, timeSpent: 100},
+      {isCorrect: true, timeSpent: 10},
+      {isCorrect: true, timeSpent: 10},
+      {isCorrect: true, timeSpent: 100},
+      {isCorrect: false, timeSpent: 100},
+      {isCorrect: false, timeSpent: 100}
+    ],
+    remainingAttempts: 1,
+    result: `Вы заняли 5-ое место из 7 игроков. Это лучше чем у 29% игроков`
   },
 ];

@@ -21,20 +21,13 @@ const getScore = ({answers}) => {
   if (answers.length === QUESTIONS_COUNT) {
     // result = sum(attempt) - penalty(remainingAttempts);
     // result = sum(answers);
-
-    score = answers
-        .map((it) => {
-          let points = -2;
-          if (it.isCorrect) {
-            if (it.timeSpent < FAST_ANSWER_PERIOD) {
-              points = 2;
-            } else {
-              points = 1;
-            }
-          }
-          return points;
-        })
-        .reduce((acc, it) => acc + it);
+    score = answers.reduce((acc, it) => {
+      let point = -2;
+      if (it.isCorrect) {
+        point = (it.timeSpent < FAST_ANSWER_PERIOD) ? 2 : 1;
+      }
+      return acc + point;
+    }, 0);
   }
   return score;
 };
@@ -70,28 +63,29 @@ const getPosition = (statistics, score) => {
 };
 
 const printResult = (statistics, game) => {
+  let endGameMessage = ``;
   const score = getScore(game);
 
-  // проигрыш
   if (score < 0) {
-    if (game.remainingAttempts < 0) {
-      return phrases.noMoreAttempts();
-    } else {
-      return phrases.timeIsUp();
-    }
+    // проигрыш
+    endGameMessage = (game.remainingAttempts < 0) ?
+      phrases.noMoreAttempts() :
+      phrases.timeIsUp();
+  } else {
+    // выйгрыш
+    const position = getPosition(statistics, score);
+    statistics.push(score);
+    statistics.sort((a, b) => b - a);
+
+    const stats = {
+      place: position + 1,
+      playersCount: statistics.length,
+      betterThan: Math.round((statistics.length - position - 1) * 100 / statistics.length)
+    };
+    endGameMessage = phrases.win(stats);
   }
 
-  // выйгрыш
-  const position = getPosition(statistics, score);
-  statistics.push(score);
-  statistics.sort((a, b) => b - a);
-
-  const stats = {
-    place: position + 1,
-    playersCount: statistics.length,
-    betterThan: (statistics.length - position - 1) * 100 / statistics.length
-  };
-  return phrases.win(stats);
+  return endGameMessage;
 };
 
 class Timer {
