@@ -1,49 +1,144 @@
+const samples = [
+  {
+    artist: `Kevin MacLeod`,
+    name: `Long Stroll`,
+    image: `https://yt3.ggpht.com/-fkDeGauT7Co/AAAAAAAAAAI/AAAAAAAAAAA/dkF5ZKkrxRo/s900-c-k-no-mo-rj-c0xffffff/photo.jpg`,
+    src: `https://www.youtube.com/audiolibrary_download?vid=91624fdc22fc54ed`,
+    genre: `Jazz`
+  }, {
+    artist: `Jingle Punks`,
+    name: `In the Land of Rhinoplasty`,
+    image: `https://i.vimeocdn.com/portrait/992615_300x300`,
+    src: `https://www.youtube.com/audiolibrary_download?vid=dc3b4dc549becd6b`,
+    genre: `Rock`
+  }, {
+    artist: `Audionautix`,
+    name: `Travel Light`,
+    image: `http://4.bp.blogspot.com/-kft9qu5ET6U/VPFUBi9W-MI/AAAAAAAACYM/UxXilXKYwOc/s1600/audionautix%2BHalf%2BSize.jpg`,
+    src: `https://www.youtube.com/audiolibrary_download?vid=a127d9b7de8a17cf`,
+    genre: `Country`
+  }, {
+    artist: `Riot`,
+    name: `	Level Plane`,
+    image: `https://i.ytimg.com/vi/jzgM3m8Vp1k/maxresdefault.jpg`,
+    src: `https://www.youtube.com/audiolibrary_download?vid=dfb828f40096184c`,
+    genre: `R&B`
+  }, {
+    artist: `Jingle Punks`,
+    name: `Lucky Day`,
+    image: `https://i.vimeocdn.com/portrait/992615_300x300`,
+    src: `https://www.youtube.com/audiolibrary_download?vid=bcbe5be936a32fb1`,
+    genre: `Pop`
+  }, {
+    artist: `Gunnar Olsen`,
+    name: `Home Stretch`,
+    image: `https://f4.bcbits.com/img/0004181452_10.jpg`,
+    src: `https://www.youtube.com/audiolibrary_download?vid=bcbe5be936a32fb1`,
+    genre: `Electronic`
+  }
+];
+
 const levels = [
   {
-    type: `Artist`,
-    title: `Кто исполняет эту песню?`,
-    questions: [
-      `Пелагея`,
-      `Краснознаменная дивизия имени моей бабушки`,
-      `Lorde`
-
-    ],
-    answer: 2
-  },
-  {
-    type: `Artist`,
-    title: `Кто исполняет эту песню?`,
-    questions: [
-      `Аа`,
-      `Бб`,
-      `Дд`
-
-    ],
-    answer: 0
-  },
-  {
-    type: `Artist`,
-    title: `Кто исполняет эту песню?`,
-    questions: [
-      `11`,
-      `22`,
-      `33`
-
-    ],
-    answer: 0
-  },
-  {
     type: `Genre`,
-    title: `Выберите инди-рок треки`,
+    title: `Выберите Jazz треки`,
     questions: [
-      {
-        url: `url1`
-      },
-      {
-        url: `url2`
-      }
+      samples[0],
+      samples[1],
+      samples[2],
+      samples[3]
     ],
-    answer: `01`
+    answer: `1000`
+  }, {
+    type: `Genre`,
+    title: `Выберите Rock треки`,
+    questions: [
+      samples[0],
+      samples[1],
+      samples[2],
+      samples[3]
+    ],
+    answer: `0110`
+  }, {
+    type: `Genre`,
+    title: `Выберите Country треки`,
+    questions: [
+      samples[0],
+      samples[1],
+      samples[2],
+      samples[3]
+    ],
+    answer: `0010`
+  }, {
+    type: `Genre`,
+    title: `Выберите R&B треки`,
+    questions: [
+      samples[0],
+      samples[1],
+      samples[2],
+      samples[3]
+    ],
+    answer: `0001`
+  }, {
+    type: `Genre`,
+    title: `Выберите Pop треки`,
+    questions: [
+      samples[4],
+      samples[1],
+      samples[2],
+      samples[3]
+    ],
+    answer: `1000`
+  }, {
+    type: `Genre`,
+    title: `Выберите Electronic треки`,
+    questions: [
+      samples[0],
+      samples[5],
+      samples[2],
+      samples[3]
+    ],
+    answer: `0100`
+  }, {
+    type: `Artist`,
+    title: `Кто исполняет эту песню?`,
+    questions: [
+      samples[0],
+      samples[1],
+      samples[2]
+    ],
+    src: samples[0].src,
+    answer: 0
+  }, {
+    type: `Artist`,
+    title: `Кто исполняет эту песню?`,
+    questions: [
+      samples[1],
+      samples[2],
+      samples[3]
+    ],
+    src: samples[2].src,
+    answer: 1
+  }, {
+    type: `Artist`,
+    title: `Кто исполняет эту песню?`,
+    questions: [
+      samples[3],
+      samples[2],
+      samples[1]
+    ],
+    src: samples[1].src,
+    answer: 2
+  }, {
+    type: `Artist`,
+    title: `Кто исполняет эту песню?`,
+    questions: [
+      samples[0],
+      samples[1],
+      samples[2]
+    ],
+    src: samples[1].src,
+    answer: 1
   }
 ];
 
@@ -52,7 +147,21 @@ const LEVELS_COUNT = 10;
 const FAST_ANSWER_PERIOD = 30;
 const MAX_ERRORS_COUNT = 4;
 const TIME_FOR_GAME = 60 * 5; // 5 minutes
-const GAME_NAME = `Угадай мелодию`;
+// const TIME_FOR_GAME = Infinity; // till time count implementation
+
+const label = {
+  GAME: `Угадай мелодию`,
+
+  TITLE_WIN: `Вы настоящий меломан!`,
+  TITLE_WELCOME: `Правила игры`,
+  TITLE_FAIL_TIME: `Увы и ах!`,
+  TITLE_FAIL_TRY: `Какая жалость!`,
+
+  BUTTON_WELCOME: `Начать игру`,
+  BUTTON_WIN: `Сыграть ещё раз`,
+  BUTTON_FAIL: `Попробовать ещё раз`
+};
+
 const phrases = {
   timeIsUp: () => `Время вышло! Вы не успели отгадать все мелодии`,
   noMoreAttempts: () =>
@@ -62,8 +171,8 @@ const phrases = {
 };
 
 const welcome = {
-  name: GAME_NAME,
-  title: `Правила игры`,
+  name: label.GAME,
+  title: label.TITLE_WELCOME,
   content: {
     rules: [
       `Правила просты&nbsp;— за&nbsp;5 минут ответить на все вопросы.`,
@@ -71,22 +180,46 @@ const welcome = {
       `Удачи!`
     ]
   },
-  button: `Начать игру`
+  button: label.BUTTON_WELCOME
 };
+
 const resultTry = {
-  name: GAME_NAME,
-  title: `Какая жалость!`,
-  button: `Попробовать ещё раз`,
+  name: label.GAME,
+  title: label.TITLE_FAIL_TRY,
+  button: label.BUTTON_FAIL,
   isWin: false
 };
+
+const resultTime = {
+  name: label.GAME,
+  title: label.TITLE_FAIL_TIME,
+  button: label.BUTTON_FAIL,
+  isWin: false
+};
+
 const resultWin = {
-  name: GAME_NAME,
-  title: `Вы настоящий меломан!`,
-  button: `Сыграть ещё раз`,
+  name: label.GAME,
+  title: label.TITLE_WIN,
+  button: label.BUTTON_WIN,
   isWin: true
 };
 
 const scoreBoard = [];
+
+/* const currentGame = {
+  level: 4,
+  remainingAttempts: 2,
+  time: 200000,
+  gameType: `Genre`,
+  score: 6,
+  isGameFinished: false,
+  answers: [
+    {isCorrect: true, timeSpent: 40},
+    {isCorrect: true, timeSpent: 20},
+    {isCorrect: false, timeSpent: 10},
+  ],
+  statistics: [20, 8, 4]
+}; */
 
 // const PRICE_OF_ERROR = 2;
 // const sum = (it) => it.reduce((acc, item) => acc + item);
@@ -169,7 +302,6 @@ const printResult = (statistics, game) => {
     // проигрыш
     endGameMessage = (time > TIME_FOR_GAME) ? phrases.timeIsUp() : phrases.noMoreAttempts();
   }
-  console.log(score, endGameMessage);
 
   return endGameMessage;
 };
@@ -196,66 +328,6 @@ class Timer {
   }
 }
 
-const currentGame = {
-  level: 4,
-  remainingAttempts: 2,
-  time: 200000,
-  gameType: `Genre`,
-  score: 6,
-  isGameFinished: false,
-  answers: [
-    {isCorrect: true, timeSpent: 40},
-    {isCorrect: true, timeSpent: 20},
-    {isCorrect: false, timeSpent: 10},
-  ],
-  statistics: [20, 8, 4]
-};
-
-const samples = [
-  {
-    artist: `Kevin MacLeod`,
-    name: `Long Stroll`,
-    image: `https://yt3.ggpht.com/-fkDeGauT7Co/AAAAAAAAAAI/AAAAAAAAAAA/dkF5ZKkrxRo/s900-c-k-no-mo-rj-c0xffffff/photo.jpg`,
-    src: `https://www.youtube.com/audiolibrary_download?vid=91624fdc22fc54ed`,
-    genre: `Jazz`
-  },
-  {
-    artist: `Jingle Punks`,
-    name: `In the Land of Rhinoplasty`,
-    image: `https://i.vimeocdn.com/portrait/992615_300x300`,
-    src: `https://www.youtube.com/audiolibrary_download?vid=dc3b4dc549becd6b`,
-    genre: `Rock`
-  },
-  {
-    artist: `Audionautix`,
-    name: `Travel Light`,
-    image: `http://4.bp.blogspot.com/-kft9qu5ET6U/VPFUBi9W-MI/AAAAAAAACYM/UxXilXKYwOc/s1600/audionautix%2BHalf%2BSize.jpg`,
-    src: `https://www.youtube.com/audiolibrary_download?vid=a127d9b7de8a17cf`,
-    genre: `Country`
-  },
-  {
-    artist: `Riot`,
-    name: `	Level Plane`,
-    image: `https://i.ytimg.com/vi/jzgM3m8Vp1k/maxresdefault.jpg`,
-    src: `https://www.youtube.com/audiolibrary_download?vid=dfb828f40096184c`,
-    genre: `R&B`
-  },
-  {
-    artist: `Jingle Punks`,
-    name: `Lucky Day`,
-    image: `https://i.vimeocdn.com/portrait/992615_300x300`,
-    src: `https://www.youtube.com/audiolibrary_download?vid=bcbe5be936a32fb1`,
-    genre: `Pop`
-  },
-  {
-    artist: `Gunnar Olsen`,
-    name: `Home Stretch`,
-    image: `https://f4.bcbits.com/img/0004181452_10.jpg`,
-    src: `https://www.youtube.com/audiolibrary_download?vid=bcbe5be936a32fb1`,
-    genre: `Electronic`
-  }
-];
-
 export {
   LEVELS_COUNT,
   MAX_ERRORS_COUNT,
@@ -265,6 +337,7 @@ export {
   Timer,
   welcome,
   resultTry,
+  resultTime,
   resultWin,
   levels,
   scoreBoard

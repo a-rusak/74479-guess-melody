@@ -1,4 +1,6 @@
-export const header = () => `
+import {MAX_ERRORS_COUNT} from '../data/game.data';
+
+export const header = (remainingAttempts) => `
 <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
   <circle
     cx="390" cy="390" r="370"
@@ -12,8 +14,17 @@ export const header = () => `
   </div>
 </svg>
 <div class="main-mistakes">
-  <img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">
-  <img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">
-  <img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">
+  ${mistakes(MAX_ERRORS_COUNT - remainingAttempts)}
 </div>
 `;
+
+const mistakes = (errors) => {
+  let mistakeElement = ``;
+  if (errors > 0) {
+    while (errors) {
+      mistakeElement += `<img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">`;
+      errors--;
+    }
+  }
+  return mistakeElement;
+};

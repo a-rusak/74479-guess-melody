@@ -2,7 +2,6 @@ import View from './view';
 import {
   LEVELS_COUNT,
   MAX_ERRORS_COUNT,
-  TIME_FOR_GAME,
   getScore,
   printResult,
   welcome as welcomeData,
@@ -25,6 +24,20 @@ class App {
     this.view.on(`replay`, this.replayHandler.bind(this));
   }
 
+  resetGame() {
+    const state = {
+      level: {
+        index: -1,
+        data: {}
+      },
+      remainingAttempts: MAX_ERRORS_COUNT,
+      time: 0,
+      answers: []
+    };
+    this.setState(state);
+    this.view.screen = this.view.templates.welcome(welcomeData);
+  }
+
   nextLevel() {
     const index = this.state.level.index + 1;
     const data = levelsData[index];
@@ -36,15 +49,16 @@ class App {
       }
     });
 
-    this.view.screen = this.view.templates[`level${data.type}`](data);
+    this.view.screen = this.view.templates[`level${data.type}`](this.state);
   }
 
   setAnswer(answer) {
     const answerObj = {
       isCorrect: answer === this.state.level.data.answer,
-      timeSpent: 50
+      timeSpent: 20
     };
     const answers = this.state.answers;
+    const time = this.state.time + answerObj.timeSpent;
     answers.push(answerObj);
     let remainingAttempts = this.state.remainingAttempts;
     if (!answerObj.isCorrect) {
@@ -53,7 +67,8 @@ class App {
 
     this.setState({
       answers,
-      remainingAttempts
+      remainingAttempts,
+      time
     });
   }
 
@@ -82,27 +97,12 @@ class App {
     return this.state.remainingAttempts > 0;
   }
 
-  resetGame() {
-    const state = {
-      level: {
-        index: -1,
-        data: {}
-      },
-      remainingAttempts: MAX_ERRORS_COUNT,
-      time: TIME_FOR_GAME,
-      answers: []
-    };
-    this.setState(state);
-    this.view.screen = this.view.templates.welcome(welcomeData);
-  }
-
   setState(state) {
     if ({}.toString.call(state).slice(8, -1) !== `Object`) {
       throw new TypeError(`Set state with object`);
     }
     this.state = Object.assign({}, this.state, state);
-
-    console.log(`setState: `, this.state);
+    // console.log(`setState: `, this.state);
   }
 
   // Handlers
@@ -113,6 +113,7 @@ class App {
 
   replayHandler() {
     this.resetGame();
+    this.nextLevel();
   }
 
   answerGenreHandler(evt) {

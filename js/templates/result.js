@@ -14,7 +14,6 @@ const template = ({name, button, title, content, isWin, score, errors}) => {
         ${ isWin ? winText : content }
       </div>
       ${ isWin ? `<span class="main-comparison">${content}</span>` : `` }
-
       <span role="button" tabindex="0" class="main-replay">${button}</span>
     </section>`;
 };
