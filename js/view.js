@@ -4,22 +4,29 @@ import {levelGenre} from "./templates/level-genre";
 import {resultWin} from "./templates/result-win";
 import {resultTime} from "./templates/result-time";
 import {resultTry} from "./templates/result-try";
-
+import {result} from "./templates/result";
+import {
+  levels as levelsData,
+  welcome as welcomeData
+} from './data/game.data';
 
 export default class View {
   constructor() {
-    this.templates = [
+    this.templates = {
       welcome,
       levelArtist,
       levelGenre,
       resultWin,
       resultTime,
-      resultTry
-    ];
-    this._index = 0;
+      resultTry,
+      result
+    };
+    this._init();
+  }
+
+  _init() {
     this.appElement = document.querySelector(`.app`);
-    this.screen = this.templates[this.index];
-    this.appElement.addEventListener(`click`, this.appClickHandler.bind(this));
+    this.on(`click`, this.appClickHandler.bind(this));
   }
 
   get screen() {
@@ -30,29 +37,37 @@ export default class View {
     this.appElement.replaceChild(view, this.screen);
   }
 
-  get index() {
-    return this._index;
-  }
-
-  set index(index) {
-    this._index = index;
-  }
-
   appClickHandler(evt) {
     if (evt && evt.target) {
-      if (evt.target.classList.contains(`main-play`)) {
-        this.index = 1;
+      const el = evt.target;
+
+      if (el.classList.contains(`main-play`)) {
+        this.trigger(`start`);
       }
-      if (evt.target.classList.contains(`main-answer`)) {
-        this.index = 2;
+      if (el.classList.contains(`main-answer-r`)) {
+        const answer = el.form.elements.answer.value;
+        this.trigger(`answerArtist`, answer);
       }
-      if (evt.target.classList.contains(`genre-answer-send`)) {
-        this.index = parseInt(Math.random() * 3, 10) + 3;
+      if (el.classList.contains(`genre-answer-send`)) {
+        evt.preventDefault();
+        const answers = [...el.form.elements.answer];
+        this.trigger(`answerGenre`, answers);
       }
       if (evt.target.classList.contains(`main-replay`)) {
-        this.index = 0;
+        this.trigger(`replay`);
       }
     }
-    this.screen = this.templates[this.index];
+  }
+
+  on(eventName, callback, el = this.appElement) {
+    el.addEventListener(eventName, (evt) => {
+      callback(evt);
+    });
+  }
+
+  trigger(eventName, data = null) {
+    let customEvent = new CustomEvent(eventName, {detail: data});
+
+    this.appElement.dispatchEvent(customEvent);
   }
 }

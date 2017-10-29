@@ -1,6 +1,6 @@
 import assert from 'assert';
 import {
-  QUESTIONS_COUNT,
+  LEVELS_COUNT,
   MAX_ERRORS_COUNT,
   getScore,
   printResult,
@@ -13,7 +13,7 @@ import {
 } from './game-data.mock';
 
 const text = (testData) => `
-  Игрок отвечал на ${testData.answers.length} вопрос(ов|а) из ${QUESTIONS_COUNT} вопросов.
+  Игрок отвечал на ${testData.answers.length} вопрос(ов|а) из ${LEVELS_COUNT} вопросов.
   Сделал ${MAX_ERRORS_COUNT - testData.remainingAttempts} ошиб(ки|ок|ку).
   ${testData.points === -1
     ? `и проиграл`
@@ -27,7 +27,7 @@ describe(`Результаты игр`, () => {
     }
     function makeTest(game) {
       it(text(game), () => {
-        assert.equal(game.points, getScore(game));
+        assert.equal(game.points, getScore(game.answers));
       });
     }
   });

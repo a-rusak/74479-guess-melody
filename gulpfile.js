@@ -39,7 +39,7 @@ gulp.task('style', function () {
 });
 
 gulp.task('scripts', function () {
-  return gulp.src('js/**/*.js')
+  return gulp.src(['js/**/*.js', '!js/**/*.mock.js', '!js/**/*.test.js'])
     .pipe(plumber())
     .pipe(sourcemaps.init())
     .pipe(rollup({}, 'iife'))
@@ -69,7 +69,7 @@ gulp.task('imagemin', ['copy'], function () {
 gulp.task('copy-html', function () {
   return gulp.src('*.{html,ico}')
     .pipe(gulp.dest('build'))
-    .pipe(server.stream());
+    //.pipe(server.stream());
 });
 
 gulp.task('copy', ['copy-html', 'scripts', 'style'], function () {

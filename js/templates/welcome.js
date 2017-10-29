@@ -1,14 +1,17 @@
 import createElement from '../element-from-template';
 
-export const welcome = createElement`
-  <section class="main main--welcome">
-    <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
-    <button class="main-play">Начать игру</button>
-    <h2 class="title main-title">Правила игры</h2>
-    <p class="text main-text">
-      Правила просты&nbsp;— за&nbsp;5 минут ответить на все вопросы.<br>
-      Ошибиться можно 3 раза.<br>
-      Удачи!
-    </p>
-  </section>
+const template = ({name, button, title, content}) => `
+<section class="main main--welcome">
+  <section class="logo" title="${name}"><h1>${name}</h1></section>
+  <button class="main-play">${button}</button>
+  <h2 class="title main-title">${title}</h2>
+  <p class="text main-text">${content.rules
+      .reduce((str, it, index, arr) => {
+        const linebreak = (index < arr.length - 1) ? `<br>` : ``;
+        it = it + linebreak;
+        return str + it;
+      }, ``)}</p>
+</section>
 `;
+
+export const welcome = (data) => createElement(template(data));
