@@ -1,0 +1,52 @@
+import AbstractView from '../view_';
+import HeaderView from './header/header-view';
+import LevelView from './level/level-genre-view';
+import {changeView, $$} from '../util';
+
+const update = (container, view) => {
+  container.innerHTML = ``;
+  container.appendChild(view.element);
+};
+
+export default class GameView extends AbstractView {
+  constructor(model) {
+    super();
+    this.model = model;
+  }
+
+  get template() {
+    return `<section class="main"></section>`;
+  }
+
+  bind() {
+    // this.headerContainer = this.element.querySelector(`.header-container`);
+    // this.levelContainer = this.element.querySelector(`.level-container`);
+    return super.bind();
+  }
+
+  updateLevel() {
+    // this.updateHeader();
+    const level = new LevelView(this.model.getCurrentLevel());
+    // level.onAnswer = (answer) => this.onAnswer(answer);
+
+    // update(this.levelContainer, level);
+    changeView(level);
+    this.level = level;
+    this.updateHeader();
+  }
+
+  updateHeader() {
+    const header = new HeaderView(this.model.getMistakes());
+    $$(`section.main`).prepend(header.element);
+    // update(this.headerContainer, new HeaderView(this.model.state));
+  }
+
+  focus() {
+    this.level.focus();
+  }
+
+  onAnswer(answer) {
+
+  }
+}
+

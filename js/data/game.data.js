@@ -173,13 +173,11 @@ const phrases = {
 const welcome = {
   name: label.GAME,
   title: label.TITLE_WELCOME,
-  content: {
-    rules: [
-      `Правила просты&nbsp;— за&nbsp;5 минут ответить на все вопросы.`,
-      `Ошибиться можно 3 раза.`,
-      `Удачи!`
-    ]
-  },
+  rules: [
+    `Правила просты&nbsp;— за&nbsp;5 минут ответить на все вопросы.`,
+    `Ошибиться можно 3 раза.`,
+    `Удачи!`
+  ],
   button: label.BUTTON_WELCOME
 };
 
@@ -205,6 +203,73 @@ const resultWin = {
 };
 
 const scoreBoard = [];
+
+const initialGame = {
+  level: -1,
+  /* level: {
+    index: -1,
+    data: {}
+  }, */
+  remainingAttempts: MAX_ERRORS_COUNT,
+  time: 0,
+  answers: []
+};
+
+export const getLevel = (index, allLevels = levels) => allLevels[index];
+
+export const nextLevel = (state, allLevels = levels) => {
+  const index = state.level + 1;
+  if (!getLevel(index, allLevels)) {
+    throw new RangeError(`Can't find level ${index}`);
+  }
+  // const data = allLevels[index];
+  // state = Object.assign({}, state);
+  state.level = index;
+  // state.level.data = data;
+  return state;
+};
+
+export const startGame = () => {
+  // return nextLevel(setState(Object.assign({}, initialGame)));
+  nextLevel();
+};
+
+export const getAllLevelsTypes = (allLevels = levels) => {
+  return allLevels.map((level) => level.type);
+};
+
+export const setLives = (game, lives) => {
+  if (lives < 0) {
+    throw new RangeError(`Can't set negative lives`);
+  }
+  game = Object.assign({}, game);
+  game.lives = lives;
+  return game;
+};
+
+/* let state = {};
+
+export const setState = (newState) => {
+  if ({}.toString.call(newState).slice(8, -1) !== `Object`) {
+    throw new TypeError(`Set state with object`);
+  }
+  state = Object.assign({}, state, newState);
+
+  console.log(`setState: `, state);
+  console.log(`initialData`, initialGame);
+  return state;
+};
+
+// state = setState(Object.assign({}, initialGame));
+state = setState({
+  level: {
+    index: -1,
+    data: {}
+  },
+  remainingAttempts: MAX_ERRORS_COUNT,
+  time: 0,
+  answers: []
+}); */
 
 /* const currentGame = {
   level: 4,
@@ -340,5 +405,6 @@ export {
   resultTime,
   resultWin,
   levels,
-  scoreBoard
+  scoreBoard,
+  initialGame
 };

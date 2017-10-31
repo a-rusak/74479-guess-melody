@@ -21,7 +21,7 @@ export default class View {
 
   _init() {
     this.appElement = document.querySelector(`.app`);
-    this.on(`click`, this.appClickHandler.bind(this));
+    // this.on(`click`, this.appClickHandler.bind(this));
   }
 
   get screen() {
