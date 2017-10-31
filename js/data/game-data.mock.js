@@ -67,7 +67,7 @@ export const gamesToTestInScoreboard = [
       {isCorrect: false, timeSpent: 400},
     ],
     remainingAttempts: 2,
-    result: `Время вышло! Вы не успели отгадать все мелодии`
+    result: `Время вышло!<br>Вы не успели отгадать все мелодии`
   },
   {
     answers: [

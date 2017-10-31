@@ -5,6 +5,7 @@ import {
   getScore,
   getAllLevelsTypes,
   scoreBoard,
+  tick,
   levels as levelsData,
   resultWin as resultWinData,
   resultTry as resultTryData,
@@ -34,6 +35,10 @@ export default class GameModel {
     this.update(nextLevel(this.state, this.data));
   }
 
+  tick() {
+    this.update(tick(this.state));
+  }
+
   getMistakes() {
     return MAX_ERRORS_COUNT - this.state.remainingAttempts;
   }
@@ -55,7 +60,7 @@ export default class GameModel {
     resultWinData.score = getScore(this.state.answers);
     resultWinData.errors = this.getMistakes();
   }
-  fail() {
+  failOnMistakes() {
     resultTryData.content = printResult(scoreBoard, this.state);
   }
 }
