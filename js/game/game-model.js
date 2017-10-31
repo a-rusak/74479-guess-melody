@@ -9,11 +9,8 @@ import {
   resultWin as resultWinData,
   resultTry as resultTryData,
   MAX_ERRORS_COUNT,
-  initialGame,
-  LEVELS_COUNT,
-  // setState
+  LEVELS_COUNT
 } from '../data/game.data';
-import Application from '../application';
 
 export default class GameModel {
   constructor(data = levelsData) {
@@ -22,11 +19,7 @@ export default class GameModel {
 
   update(newState) {
     this.state = Object.assign({}, this.state, newState);
-    console.log(`update state: `, this.state);
-    console.log(`initia state: `, initialGame);
-    console.log(`==============`);
     return this.state;
-    // Application.state = setState(newState);
   }
 
   resetAnswers(state) {
@@ -55,10 +48,6 @@ export default class GameModel {
 
   isLastLevel() {
     return this.state.level === LEVELS_COUNT - 1;
-  }
-
-  tick() {
-    // this.update(tick(state));
   }
 
   win() {

@@ -40,17 +40,14 @@ class GameScreen {
   }
 
   setGame() {
-    console.log(this.model.isLastLevel(), this.model.getMistakes());
     if (this.model.isLastLevel() && this.model.getMistakes() < MAX_ERRORS_COUNT) {
       // сделан ответ на последнем уровне и есть запас по ошибкам
       this.model.win();
       Application.win();
-      // this.view.screen = this.view.templates.result(resultWinData);
     } else if (this.model.getMistakes() >= MAX_ERRORS_COUNT) {
       // превышен лимит ошибок
       this.model.fail();
       Application.fail();
-      // this.view.screen = this.view.templates.result(resultTryData);
     } else {
       this.model.nextLevel();
       this.changeLevel(this.model.getLevelType());

@@ -1,4 +1,4 @@
-import AbstractView from '../../view_';
+import AbstractView from '../../view';
 
 const mistakes = (errors) => {
   let mistakeElement = ``;

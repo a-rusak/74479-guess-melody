@@ -1,5 +1,5 @@
-import AbstractView from '../../view_';
-import {$$, $on, $trigger} from '../../util';
+import AbstractView from '../../view';
+import {$on, $trigger} from '../../util';
 
 export default class LevelArtistView extends AbstractView {
   constructor(level) {

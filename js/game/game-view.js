@@ -1,4 +1,4 @@
-import AbstractView from '../view_';
+import AbstractView from '../view';
 import HeaderView from './header/header-view';
 import LevelGenreView from './level/level-genre-view';
 import LevelArtistView from './level/level-artist-view';

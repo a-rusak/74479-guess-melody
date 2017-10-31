@@ -1,7 +1,6 @@
 export const createElement = (template) => {
   const outer = document.createElement(`div`);
   outer.innerHTML = template;
-  // return outer;
   return outer.firstElementChild;
 };
 
@@ -12,8 +11,6 @@ export const $$ = (selector, scope = window.document) => {
 const appElement = $$(`.app`);
 
 export const changeView = (view) => {
-  // main.innerHTML = ``;
-  // main.appendChild(view.element);
   appElement.replaceChild(view.element, $$(`section.main`));
 };
 

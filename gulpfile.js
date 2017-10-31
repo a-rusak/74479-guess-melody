@@ -69,7 +69,7 @@ gulp.task('imagemin', ['copy'], function () {
 gulp.task('copy-html', function () {
   return gulp.src('*.{html,ico}')
     .pipe(gulp.dest('build'))
-    //.pipe(server.stream());
+    .pipe(server.stream());
 });
 
 gulp.task('copy', ['copy-html', 'scripts', 'style'], function () {

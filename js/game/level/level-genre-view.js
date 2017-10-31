@@ -1,4 +1,4 @@
-import AbstractView from '../../view_';
+import AbstractView from '../../view';
 import {$$, $on, $trigger} from '../../util';
 
 export default class LevelGenreView extends AbstractView {

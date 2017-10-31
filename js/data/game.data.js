@@ -142,12 +142,10 @@ const levels = [
   }
 ];
 
-// const LEVELS_COUNT = levels.length;
 const LEVELS_COUNT = 10;
 const FAST_ANSWER_PERIOD = 30;
 const MAX_ERRORS_COUNT = 4;
 const TIME_FOR_GAME = 60 * 5; // 5 minutes
-// const TIME_FOR_GAME = Infinity; // till time count implementation
 
 const label = {
   GAME: `Угадай мелодию`,
@@ -206,10 +204,6 @@ const scoreBoard = [];
 
 const initialGame = {
   level: -1,
-  /* level: {
-    index: -1,
-    data: {}
-  }, */
   remainingAttempts: MAX_ERRORS_COUNT,
   time: 0,
   answers: []
@@ -222,15 +216,11 @@ export const nextLevel = (state, allLevels = levels) => {
   if (!getLevel(index, allLevels)) {
     throw new RangeError(`Can't find level ${index}`);
   }
-  // const data = allLevels[index];
-  // state = Object.assign({}, state);
   state.level = index;
-  // state.level.data = data;
   return state;
 };
 
 export const startGame = () => {
-  // return nextLevel(setState(Object.assign({}, initialGame)));
   nextLevel();
 };
 
@@ -247,56 +237,10 @@ export const setLives = (game, lives) => {
   return game;
 };
 
-/* let state = {};
-
-export const setState = (newState) => {
-  if ({}.toString.call(newState).slice(8, -1) !== `Object`) {
-    throw new TypeError(`Set state with object`);
-  }
-  state = Object.assign({}, state, newState);
-
-  console.log(`setState: `, state);
-  console.log(`initialData`, initialGame);
-  return state;
-};
-
-// state = setState(Object.assign({}, initialGame));
-state = setState({
-  level: {
-    index: -1,
-    data: {}
-  },
-  remainingAttempts: MAX_ERRORS_COUNT,
-  time: 0,
-  answers: []
-}); */
-
-/* const currentGame = {
-  level: 4,
-  remainingAttempts: 2,
-  time: 200000,
-  gameType: `Genre`,
-  score: 6,
-  isGameFinished: false,
-  answers: [
-    {isCorrect: true, timeSpent: 40},
-    {isCorrect: true, timeSpent: 20},
-    {isCorrect: false, timeSpent: 10},
-  ],
-  statistics: [20, 8, 4]
-}; */
-
-// const PRICE_OF_ERROR = 2;
-// const sum = (it) => it.reduce((acc, item) => acc + item);
-// const penalty = (remainingAttempts) => (MAX_ERRORS_COUNT - remainingAttempts) * PRICE_OF_ERROR;
-
-// const getScore = ({answers, remainingAttempts}) => {
 const getScore = (answers) => {
   let score = -1;
 
   if (answers.length === LEVELS_COUNT) {
-    // result = sum(attempt) - penalty(remainingAttempts);
-    // result = sum(answers);
     score = answers.reduce((acc, it) => {
       let point = -2;
       if (it.isCorrect) {
