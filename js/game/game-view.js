@@ -49,7 +49,11 @@ export default class GameView extends AbstractView {
   }
 
   updateHeader() {
-    const header = new HeaderView(this.model.getMistakes());
+    const header = new HeaderView(this.model.getMistakes(), this.model.state.time);
+    const headerElement = $$(`section.main > header`);
+    if (headerElement !== null) {
+      headerElement.remove();
+    }
     $$(`section.main`).prepend(header.element);
   }
 
@@ -77,4 +81,3 @@ export default class GameView extends AbstractView {
   }
 
 }
-
