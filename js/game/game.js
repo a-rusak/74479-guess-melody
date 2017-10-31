@@ -59,10 +59,11 @@ class GameScreen {
   }
 
   answerGenreHandler(evt) {
-    const answerMask = evt.detail.reduce((acc, it) => {
-      const m = it.checked ? 1 : 0;
-      return acc + m;
-    }, ``);
+    const answers = evt.detail;
+    let answerMask = ``;
+    for (let answer of answers) {
+      answerMask += answer.checked ? 1 : 0;
+    }
     this.setAnswer(answerMask);
     this.setGame();
   }
