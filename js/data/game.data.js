@@ -38,7 +38,7 @@ const samples = [
   }
 ];
 
-const levels = [
+export const levels = [
   {
     type: `Genre`,
     title: `Выберите Jazz треки`,
@@ -142,10 +142,10 @@ const levels = [
   }
 ];
 
-const LEVELS_COUNT = 10;
-const FAST_ANSWER_PERIOD = 30;
-const MAX_ERRORS_COUNT = 4;
-const TIME_FOR_GAME = 60 * 5; // 5 minutes
+export const LEVELS_COUNT = 10;
+export const FAST_ANSWER_PERIOD = 30;
+export const MAX_ERRORS_COUNT = 4;
+export const TIME_FOR_GAME = 60 * 5 + 1; // 5 minutes + 1 second
 
 const label = {
   GAME: `Угадай мелодию`,
@@ -161,14 +161,14 @@ const label = {
 };
 
 const phrases = {
-  timeIsUp: () => `Время вышло! Вы не успели отгадать все мелодии`,
+  timeIsUp: () => `Время вышло!<br>Вы не успели отгадать все мелодии`,
   noMoreAttempts: () =>
     `У вас закончились все попытки.<br>Ничего, повезёт в следующий раз!`,
   win: ({place, playersCount, betterThan}) =>
     `Вы заняли ${place}-ое место из ${playersCount} игроков. Это&nbsp;лучше чем у&nbsp;${betterThan}%&nbsp;игроков`
 };
 
-const welcome = {
+export const welcome = {
   name: label.GAME,
   title: label.TITLE_WELCOME,
   rules: [
@@ -179,34 +179,41 @@ const welcome = {
   button: label.BUTTON_WELCOME
 };
 
-const resultTry = {
+export const resultTry = {
   name: label.GAME,
   title: label.TITLE_FAIL_TRY,
   button: label.BUTTON_FAIL,
   isWin: false
 };
 
-const resultTime = {
+export const resultTime = {
   name: label.GAME,
   title: label.TITLE_FAIL_TIME,
   button: label.BUTTON_FAIL,
+  content: phrases.timeIsUp(),
   isWin: false
 };
 
-const resultWin = {
+export const resultWin = {
   name: label.GAME,
   title: label.TITLE_WIN,
   button: label.BUTTON_WIN,
   isWin: true
 };
 
-const scoreBoard = [];
+export const scoreBoard = [];
 
-const initialGame = {
+export const initialGame = {
   level: -1,
   remainingAttempts: MAX_ERRORS_COUNT,
-  time: 0,
+  time: TIME_FOR_GAME,
   answers: []
+};
+
+export const tick = (game) => {
+  game = Object.assign({}, game);
+  game.time--;
+  return game;
 };
 
 export const getLevel = (index, allLevels = levels) => allLevels[index];
@@ -237,7 +244,7 @@ export const setLives = (game, lives) => {
   return game;
 };
 
-const getScore = (answers) => {
+export const getScore = (answers) => {
   let score = -1;
 
   if (answers.length === LEVELS_COUNT) {
@@ -289,7 +296,7 @@ const getPosition = (statistics, score) => {
   return position;
 };
 
-const printResult = (statistics, game) => {
+export const printResult = (statistics, game) => {
   let endGameMessage = ``;
   const score = getScore(game.answers);
   const time = getTimeSpent(game.answers);
@@ -315,7 +322,7 @@ const printResult = (statistics, game) => {
   return endGameMessage;
 };
 
-class Timer {
+export class Timer {
   constructor(time) {
     this.time = time;
   }
@@ -336,19 +343,3 @@ class Timer {
     this.time--;
   }
 }
-
-export {
-  LEVELS_COUNT,
-  MAX_ERRORS_COUNT,
-  TIME_FOR_GAME,
-  getScore,
-  printResult,
-  Timer,
-  welcome,
-  resultTry,
-  resultTime,
-  resultWin,
-  levels,
-  scoreBoard,
-  initialGame
-};
