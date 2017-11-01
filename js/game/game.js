@@ -117,4 +117,3 @@ class GameScreen {
 }
 
 export default new GameScreen();
-
