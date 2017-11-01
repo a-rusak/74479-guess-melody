@@ -5,7 +5,6 @@ import {
   resultTry as tryData,
   resultTime as timeData,
   resultWin as winData,
-  levels as levelsData,
   initialGame
 } from './data/game.data';
 import {$on} from './util';
@@ -17,24 +16,20 @@ const resultData = {
 };
 
 export default class Application {
-  static init(data) {
+
+  static showWelcome(data) {
     welcomeScreen.init();
     Application.game = new GameScreen(data);
-    $on(`start`, Application.startGame);
-    $on(`replay`, Application.startGame);
+    $on(`game:start`, Application.showGame);
+    $on(`game:replay`, Application.showGame);
   }
 
-  static startGame(evt, state = initialGame) {
+  static showGame(evt, state = initialGame) {
     Application.game.init(state);
-    Application.game.tick();
   }
 
   static showResult(type) {
-    Application.game.stopTimer();
     const resultScreen = new ResultScreen(resultData[type]);
     resultScreen.init();
   }
-
 }
-
-Application.init(levelsData);

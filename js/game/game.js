@@ -8,8 +8,8 @@ class GameScreen {
   constructor(data = levels) {
     this.model = new GameModel(data);
     this.view = new GameView(this.model);
-    $on(`answerGenre`, (evt) => this.answerGenreHandler(evt));
-    $on(`answerArtist`, (evt) => this.answerArtistHandler(evt));
+    $on(`answer:genre`, (evt) => this.answerGenreHandler(evt));
+    $on(`answer:artist`, (evt) => this.answerArtistHandler(evt));
   }
 
   init(state = initialGame) {
@@ -17,9 +17,10 @@ class GameScreen {
     this.model.update(state);
     this.model.nextLevel();
     this.changeLevel(this.model.getLevelType());
+    this.tick();
   }
 
-  setAnswer(answer) {
+  updateState(answer) {
     const answerObj = {
       isCorrect: answer === levels[this.model.state.level].answer,
       timeSpent: 20
@@ -37,17 +38,17 @@ class GameScreen {
     });
   }
 
-  setGame() {
+  onAnswer() {
     if (this.model.isLastLevel() && this.model.getMistakes() < MAX_ERRORS_COUNT) {
       // сделан ответ на последнем уровне и есть запас по ошибкам
       this.model.win();
-      // Application.win();
       Application.showResult(`WIN`);
+      this.stopTimer();
     } else if (this.model.getMistakes() >= MAX_ERRORS_COUNT) {
       // превышен лимит ошибок
       this.model.failOnMistakes();
-      // Application.failOnMistakes();
       Application.showResult(`TRY`);
+      this.stopTimer();
     } else {
       this.model.nextLevel();
       this.changeLevel(this.model.getLevelType());
@@ -63,8 +64,8 @@ class GameScreen {
     this.view.updateHeader();
 
     if (this.model.state.time <= 0) {
-      // Application.failNoMoreTime();
       Application.showResult(`TIME`);
+      this.stopTimer();
     } else {
       this.timer = setTimeout(() => this.tick(), 1000);
     }
@@ -80,14 +81,14 @@ class GameScreen {
     for (let answer of answers) {
       answerMask += answer.checked ? 1 : 0;
     }
-    this.setAnswer(answerMask);
-    this.setGame();
+    this.updateState(answerMask);
+    this.onAnswer();
   }
 
   answerArtistHandler(evt) {
     const answer = +evt.detail.split(`-`)[1];
-    this.setAnswer(answer);
-    this.setGame();
+    this.updateState(answer);
+    this.onAnswer();
   }
 
 }
