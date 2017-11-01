@@ -66,6 +66,6 @@ export default class LevelGenreView extends AbstractView {
   handlerAnswer(evt) {
     evt.preventDefault();
     const answers = [...evt.target.form.elements.answer];
-    $trigger(`answerGenre`, answers);
+    $trigger(`answer:genre`, answers);
   }
 }
