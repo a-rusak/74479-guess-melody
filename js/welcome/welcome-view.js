@@ -26,7 +26,7 @@ export default class WelcomeView extends AbstractView {
   bind() {
     $on(
         `click`,
-        () => $trigger(`start`),
+        () => $trigger(`game:start`),
         $$(`.main-play`, this.element)
     );
   }
