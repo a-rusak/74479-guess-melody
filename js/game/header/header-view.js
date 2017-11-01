@@ -20,7 +20,7 @@ export default class HeaderView extends AbstractView {
 
   get template() {
     const minutes = parseInt(this.time / 60, 10);
-    const seconds = this.time - minutes * 60;
+    const seconds = this.time % 60;
     const zero = (value) => (value < 10) ? `0` : ``;
     return `
 <header>
