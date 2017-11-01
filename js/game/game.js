@@ -93,4 +93,4 @@ class GameScreen {
 
 }
 
-export default GameScreen;
+export default new GameScreen();
