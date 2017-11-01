@@ -30,7 +30,7 @@ export default class ResultView extends AbstractView {
   bind() {
     $on(
         `click`,
-        () => $trigger(`replay`),
+        () => $trigger(`game:replay`),
         $$(`.main-replay`, this.element)
     );
   }
