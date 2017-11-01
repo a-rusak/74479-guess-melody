@@ -1,17 +1,34 @@
-import AbstractView from '../view';
-import {$$, $on, $trigger} from '../util';
+import AbstractView from "../view";
+import {$$, $on, $trigger} from "../util";
 
 export default class ResultView extends AbstractView {
-  constructor(data) {
+  constructor(model) {
     super();
-    this.data = data;
+    this.model = model;
   }
 
   get template() {
-    const {name, button, title, content, isWin, score, errors} = this.data;
+    const {
+      name,
+      button,
+      title,
+      content,
+      isWin,
+      score,
+      errors,
+      time,
+      fastScore,
+      place,
+      playersCount,
+      betterThan
+    } = this.model.getData();
+
+    const minutes = parseInt(time / 60, 10);
+    const seconds = time % 60;
+
     const winText = `
-За&nbsp;3&nbsp;минуты и 25&nbsp;секунд
-<br>вы&nbsp;набрали ${score} баллов (8 быстрых)
+За&nbsp;${minutes}&nbsp;минуты и ${seconds}&nbsp;секунд
+<br>вы&nbsp;набрали ${score} баллов (${fastScore} быстрых)
 <br>совершив ${errors} ошибки`;
 
     return `
@@ -20,9 +37,9 @@ export default class ResultView extends AbstractView {
 
   <h2 class="title">${title}</h2>
   <div class="main-stat">
-    ${ isWin ? winText : content }
+    ${isWin ? winText : content}
   </div>
-  ${ isWin ? `<span class="main-comparison">${content}</span>` : `` }
+  ${isWin ? `<span class="main-comparison">${content}</span>` : ``}
   <span role="button" tabindex="0" class="main-replay">${button}</span>
 </section>`.trim();
   }
@@ -35,4 +52,3 @@ export default class ResultView extends AbstractView {
     );
   }
 }
-
