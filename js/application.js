@@ -9,6 +9,18 @@ const ControllerId = {
   RESULT: `result`
 };
 
+const save = (state) => {
+  return JSON.stringify(state);
+};
+
+const load = (dataString) => {
+  try {
+    return JSON.parse(dataString);
+  } catch (e) {
+    return false;
+  }
+};
+
 export default class Application {
 
   static init() {
@@ -34,7 +46,11 @@ export default class Application {
   static changeHash(id, data) {
     const controller = Application.routes[id];
     if (controller) {
-      controller.init(data);
+      if (data) {
+        controller.init(load(data));
+      } else {
+        controller.init();
+      }
     }
   }
 
@@ -50,8 +66,8 @@ export default class Application {
     // Application.game.init(state);
   }
 
-  static showResult(result) {
-    location.hash = `${ControllerId.RESULT}?${result}`;
+  static showResult(stat) {
+    location.hash = `${ControllerId.RESULT}?${save(stat)}`;
     // Application.routes[ControllerId.RESULT].init(resultData[type]);
     // const resultScreen = new ResultScreen(resultData[type]);
   }

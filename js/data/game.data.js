@@ -183,7 +183,7 @@ export const resultTry = {
   name: label.GAME,
   title: label.TITLE_FAIL_TRY,
   button: label.BUTTON_FAIL,
-  isWin: false
+  isWin: false,
 };
 
 export const resultTime = {
@@ -231,18 +231,18 @@ export const startGame = () => {
   nextLevel();
 };
 
-export const getAllLevelsTypes = (allLevels = levels) => {
+/* export const getAllLevelsTypes = (allLevels = levels) => {
   return allLevels.map((level) => level.type);
-};
+}; */
 
-export const setLives = (game, lives) => {
+/* export const setLives = (game, lives) => {
   if (lives < 0) {
     throw new RangeError(`Can't set negative lives`);
   }
   game = Object.assign({}, game);
   game.lives = lives;
   return game;
-};
+}; */
 
 export const getScore = (answers) => {
   let score = -1;
@@ -257,6 +257,13 @@ export const getScore = (answers) => {
     }, 0);
   }
   return score;
+};
+
+export const getFastScore = (answers) => {
+  const slowScore = answers
+      .filter((it) => it.isCorrect && it.timeSpent >= FAST_ANSWER_PERIOD)
+      .length;
+  return getScore(answers) - slowScore;
 };
 
 const getTimeSpent = (answers) => {
@@ -307,12 +314,11 @@ export const printResult = (statistics, game) => {
     statistics.push(score);
     statistics.sort((a, b) => b - a);
 
-    const stats = {
-      place: position + 1,
-      playersCount: statistics.length,
-      betterThan: Math.round((statistics.length - position - 1) * 100 / statistics.length)
-    };
-    endGameMessage = phrases.win(stats);
+    resultWin.place = position + 1;
+    resultWin.playersCount = statistics.length;
+    resultWin.betterThan = Math.round((statistics.length - position - 1) * 100 / statistics.length);
+
+    endGameMessage = phrases.win(resultWin);
 
   } else {
     // проигрыш

@@ -4,19 +4,15 @@ import {
   resultWin as winData,
 } from '../data/game.data';
 
-const resultData = {
-  TRY: tryData,
-  TIME: timeData,
-  WIN: winData
-};
-
-
 import {changeView} from '../util';
 import ResultView from './result-view';
+import ResultModel from './result-model';
 
 class ResultScreen {
-  init(type) {
-    this.view = new ResultView(resultData[type]);
+  init(result) {
+    this.model = new ResultModel(result);
+    this.view = new ResultView(this.model);
+    // this.view = new ResultView(resultData[type]);
     changeView(this.view);
   }
 }
