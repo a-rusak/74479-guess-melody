@@ -1,24 +1,12 @@
 import welcomeScreen from './welcome/welcome';
 import gameScreen from './game/game';
 import resultScreen from './result/result';
-import {$on} from './util';
+import {$on, getJson, getParams} from './util';
 
 const ControllerId = {
   WELCOME: ``,
   GAME: `game`,
   RESULT: `result`
-};
-
-const save = (state) => {
-  return JSON.stringify(state);
-};
-
-const load = (dataString) => {
-  try {
-    return JSON.parse(dataString);
-  } catch (e) {
-    return false;
-  }
 };
 
 export default class Application {
@@ -32,22 +20,21 @@ export default class Application {
 
     const hashChangeHandler = () => {
       const hashValue = location.hash.replace(`#`, ``);
-      const [id, data] = hashValue.split(`?`);
-      Application.changeHash(id, data);
+      const [id, params] = hashValue.split(`?`);
+      Application.changeHash(id, params);
     };
     window.onhashchange = hashChangeHandler;
     hashChangeHandler();
 
     $on(`game:start`, Application.showGame);
     $on(`game:replay`, Application.showGame);
-    Application.showWelcome();
   }
 
-  static changeHash(id, data) {
+  static changeHash(id, params) {
     const controller = Application.routes[id];
     if (controller) {
-      if (data) {
-        controller.init(load(data));
+      if (params) {
+        controller.init(getJson(params));
       } else {
         controller.init();
       }
@@ -56,19 +43,14 @@ export default class Application {
 
   static showWelcome() {
     location.hash = ControllerId.WELCOME;
-    // welcomeScreen.init();
-    // Application.game = new GameScreen();
   }
 
   static showGame() {
     location.hash = ControllerId.GAME;
-    // Application.routes[ControllerId.GAME].init(state);
-    // Application.game.init(state);
   }
 
-  static showResult(stat) {
-    location.hash = `${ControllerId.RESULT}?${save(stat)}`;
-    // Application.routes[ControllerId.RESULT].init(resultData[type]);
-    // const resultScreen = new ResultScreen(resultData[type]);
+  static showResult(statistics) {
+    const urlParams = statistics ? getParams(statistics) : ``;
+    location.hash = `${ControllerId.RESULT}?${urlParams}`;
   }
 }

@@ -1,7 +1,6 @@
 import {
   getLevel,
   nextLevel,
-  // getAllLevelsTypes,
   tick,
   levels as levelsData,
   MAX_ERRORS_COUNT,
@@ -42,10 +41,6 @@ export default class GameModel {
   getLevelType() {
     return this.getCurrentLevel().type;
   }
-
-  /* getAllLevelsTypes() {
-    return getAllLevelsTypes();
-  } */
 
   isLastLevel() {
     return this.state.level === LEVELS_COUNT - 1;

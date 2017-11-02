@@ -6,12 +6,6 @@ import ResultModel from '../result/result-model.js';
 import GameView from './game-view';
 import AnswerTimer from '../data/timer';
 
-const resultType = {
-  TRY: `try`,
-  TIME: `time`,
-  WIN: `win`
-};
-
 class GameScreen {
   constructor(data = levels) {
     this.model = new GameModel(data);
@@ -35,7 +29,7 @@ class GameScreen {
       isCorrect: answer === levels[this.model.state.level].answer,
       timeSpent: AnswerTimer.time
     };
-    console.log(answerObj);
+    // console.log(answerObj);
     const answers = this.model.state.answers;
     answers.push(answerObj);
     let remainingAttempts = this.model.state.remainingAttempts;
@@ -58,14 +52,12 @@ class GameScreen {
       this.stopTimer();
       ResultModel.type = `WIN`;
       ResultModel.updateWinData(this.model.state);
-      // this.model.resultType = resultType.WIN;
       Application.showResult(ResultModel.getStatistics());
 
     } else if (this.model.getMistakes() >= MAX_ERRORS_COUNT) {
       // превышен лимит ошибок
       this.stopTimer();
       ResultModel.failOnMistakes(this.model.state);
-      // this.model.resultType = resultType.TRY;
       ResultModel.type = `TRY`;
       Application.showResult();
 
@@ -86,7 +78,6 @@ class GameScreen {
 
     if (this.model.state.time <= 0) {
       this.stopTimer();
-      // this.model.resultType = resultType.TIME;
       ResultModel.type = `TIME`;
       Application.showResult();
     } else {
