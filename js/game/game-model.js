@@ -1,16 +1,10 @@
 import {
   getLevel,
   nextLevel,
-  printResult,
-  getScore,
-  getAllLevelsTypes,
-  scoreBoard,
   tick,
   levels as levelsData,
-  resultWin as resultWinData,
-  resultTry as resultTryData,
   MAX_ERRORS_COUNT,
-  LEVELS_COUNT
+  LEVELS_COUNT,
 } from '../data/game.data';
 
 export default class GameModel {
@@ -20,6 +14,7 @@ export default class GameModel {
 
   update(newState) {
     this.state = Object.assign({}, this.state, newState);
+    // console.log(this.state);
     return this.state;
   }
 
@@ -47,20 +42,7 @@ export default class GameModel {
     return this.getCurrentLevel().type;
   }
 
-  getAllLevelsTypes() {
-    return getAllLevelsTypes();
-  }
-
   isLastLevel() {
     return this.state.level === LEVELS_COUNT - 1;
-  }
-
-  win() {
-    resultWinData.content = printResult(scoreBoard, this.state);
-    resultWinData.score = getScore(this.state.answers);
-    resultWinData.errors = this.getMistakes();
-  }
-  failOnMistakes() {
-    resultTryData.content = printResult(scoreBoard, this.state);
   }
 }

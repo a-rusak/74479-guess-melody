@@ -1,35 +1,56 @@
 import welcomeScreen from './welcome/welcome';
-import GameScreen from './game/game';
-import ResultScreen from './result/result';
-import {
-  resultTry as tryData,
-  resultTime as timeData,
-  resultWin as winData,
-  initialGame
-} from './data/game.data';
-import {$on} from './util';
+import gameScreen from './game/game';
+import resultScreen from './result/result';
+import {$on, getJson, getParams} from './util';
 
-const resultData = {
-  TRY: tryData,
-  TIME: timeData,
-  WIN: winData
+const ControllerId = {
+  WELCOME: ``,
+  GAME: `game`,
+  RESULT: `result`
 };
 
 export default class Application {
 
-  static showWelcome(data) {
-    welcomeScreen.init();
-    Application.game = new GameScreen(data);
+  static init() {
+    Application.routes = {
+      [ControllerId.WELCOME]: welcomeScreen,
+      [ControllerId.GAME]: gameScreen,
+      [ControllerId.RESULT]: resultScreen
+    };
+
+    const hashChangeHandler = () => {
+      const hashValue = location.hash.replace(`#`, ``);
+      const [id, params] = hashValue.split(`?`);
+      Application.changeHash(id, params);
+    };
+    window.onhashchange = hashChangeHandler;
+    hashChangeHandler();
+
     $on(`game:start`, Application.showGame);
     $on(`game:replay`, Application.showGame);
   }
 
-  static showGame(evt, state = initialGame) {
-    Application.game.init(state);
+  static changeHash(id, params) {
+    const controller = Application.routes[id];
+    if (controller) {
+      if (params) {
+        controller.init(getJson(params));
+      } else {
+        controller.init();
+      }
+    }
   }
 
-  static showResult(type) {
-    const resultScreen = new ResultScreen(resultData[type]);
-    resultScreen.init();
+  static showWelcome() {
+    location.hash = ControllerId.WELCOME;
+  }
+
+  static showGame() {
+    location.hash = ControllerId.GAME;
+  }
+
+  static showResult(statistics) {
+    const urlParams = statistics ? getParams(statistics) : ``;
+    location.hash = `${ControllerId.RESULT}?${urlParams}`;
   }
 }

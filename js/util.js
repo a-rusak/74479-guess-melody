@@ -26,3 +26,14 @@ export const $trigger = (eventName, data = null) => {
   appElement.dispatchEvent(customEvent);
 };
 
+export const getJson = (urlParams) => {
+  try {
+    return JSON.parse(atob(urlParams));
+  } catch (e) {
+    return false;
+  }
+};
+
+export const getParams = (dataObject) => {
+  return btoa(JSON.stringify(dataObject));
+};

@@ -2,7 +2,9 @@ import {$on} from '../util';
 import {MAX_ERRORS_COUNT, initialGame, levels} from '../data/game.data';
 import Application from '../application';
 import GameModel from './game-model';
+import ResultModel from '../result/result-model.js';
 import GameView from './game-view';
+import AnswerTimer from '../data/timer';
 
 class GameScreen {
   constructor(data = levels) {
@@ -13,6 +15,8 @@ class GameScreen {
   }
 
   init(state = initialGame) {
+    AnswerTimer.stop();
+    AnswerTimer.reset();
     this.model.resetAnswers(state);
     this.model.update(state);
     this.model.nextLevel();
@@ -23,8 +27,9 @@ class GameScreen {
   updateState(answer) {
     const answerObj = {
       isCorrect: answer === levels[this.model.state.level].answer,
-      timeSpent: 20
+      timeSpent: AnswerTimer.time
     };
+    // console.log(answerObj);
     const answers = this.model.state.answers;
     answers.push(answerObj);
     let remainingAttempts = this.model.state.remainingAttempts;
@@ -39,16 +44,23 @@ class GameScreen {
   }
 
   onAnswer() {
+    AnswerTimer.stop();
+    AnswerTimer.reset();
+
     if (this.model.isLastLevel() && this.model.getMistakes() < MAX_ERRORS_COUNT) {
       // сделан ответ на последнем уровне и есть запас по ошибкам
-      this.model.win();
-      Application.showResult(`WIN`);
       this.stopTimer();
+      ResultModel.type = `WIN`;
+      ResultModel.updateWinData(this.model.state);
+      Application.showResult(ResultModel.getStatistics());
+
     } else if (this.model.getMistakes() >= MAX_ERRORS_COUNT) {
       // превышен лимит ошибок
-      this.model.failOnMistakes();
-      Application.showResult(`TRY`);
       this.stopTimer();
+      ResultModel.failOnMistakes(this.model.state);
+      ResultModel.type = `TRY`;
+      Application.showResult();
+
     } else {
       this.model.nextLevel();
       this.changeLevel(this.model.getLevelType());
@@ -57,6 +69,7 @@ class GameScreen {
 
   changeLevel(type) {
     this.view.updateLevel(type);
+    AnswerTimer.start();
   }
 
   tick() {
@@ -64,8 +77,9 @@ class GameScreen {
     this.view.updateHeader();
 
     if (this.model.state.time <= 0) {
-      Application.showResult(`TIME`);
       this.stopTimer();
+      ResultModel.type = `TIME`;
+      Application.showResult();
     } else {
       this.timer = setTimeout(() => this.tick(), 1000);
     }
@@ -93,4 +107,5 @@ class GameScreen {
 
 }
 
-export default GameScreen;
+export default new GameScreen();
+
