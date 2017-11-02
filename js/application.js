@@ -31,6 +31,11 @@ export default class Application {
   }
 
   static changeHash(id, params) {
+    gameScreen.stopTimer();
+    if (gameScreen.AnswerTimer) {
+      gameScreen.AnswerTimer.stop();
+      gameScreen.AnswerTimer.reset();
+    }
     const controller = Application.routes[id];
     if (controller) {
       if (params) {

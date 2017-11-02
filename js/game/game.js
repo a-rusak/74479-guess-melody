@@ -15,8 +15,9 @@ class GameScreen {
   }
 
   init(state = initialGame) {
-    AnswerTimer.stop();
-    AnswerTimer.reset();
+    this.AnswerTimer = AnswerTimer;
+    this.AnswerTimer.stop();
+    this.AnswerTimer.reset();
     this.model.resetAnswers(state);
     this.model.update(state);
     this.model.nextLevel();
@@ -27,7 +28,7 @@ class GameScreen {
   updateState(answer) {
     const answerObj = {
       isCorrect: answer === levels[this.model.state.level].answer,
-      timeSpent: AnswerTimer.time
+      timeSpent: this.AnswerTimer.time
     };
     // console.log(answerObj);
     const answers = this.model.state.answers;
@@ -44,8 +45,8 @@ class GameScreen {
   }
 
   onAnswer() {
-    AnswerTimer.stop();
-    AnswerTimer.reset();
+    this.AnswerTimer.stop();
+    this.AnswerTimer.reset();
 
     if (this.model.isLastLevel() && this.model.getMistakes() < MAX_ERRORS_COUNT) {
       // сделан ответ на последнем уровне и есть запас по ошибкам
@@ -69,7 +70,7 @@ class GameScreen {
 
   changeLevel(type) {
     this.view.updateLevel(type);
-    AnswerTimer.start();
+    this.AnswerTimer.start();
   }
 
   tick() {
