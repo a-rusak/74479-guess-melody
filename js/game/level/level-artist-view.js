@@ -53,7 +53,7 @@ export default class LevelArtistView extends AbstractView {
     buttons.forEach((button) => {
       $on(`change`, () => {
         const answer = button.form.elements.answer.value;
-        $trigger(`answerArtist`, answer);
+        $trigger(`answer:artist`, answer);
       }, button);
     });
   }
