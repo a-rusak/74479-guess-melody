@@ -10,7 +10,6 @@ export default class Timer {
   static tick() {
     Timer.time++;
     Timer.timeout = setTimeout(() => Timer.tick(), 1000);
-    // console.log(Timer.time);
   }
 
   static start() {

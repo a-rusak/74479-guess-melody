@@ -39,7 +39,7 @@ export default class ResultView extends AbstractView {
   <div class="main-stat">
     ${isWin ? winText : content}
   </div>
-  ${isWin ? `<span class="main-comparison">${content}</span>` : ``}
+  ${isWin ? `<span class="main-comparison">Вы заняли ${place}-ое место из ${playersCount} игроков. Это&nbsp;лучше чем у&nbsp;${betterThan}%&nbsp;игроков</span>` : ``}
   <span role="button" tabindex="0" class="main-replay">${button}</span>
 </section>`.trim();
   }

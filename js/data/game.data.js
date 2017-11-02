@@ -231,19 +231,6 @@ export const startGame = () => {
   nextLevel();
 };
 
-/* export const getAllLevelsTypes = (allLevels = levels) => {
-  return allLevels.map((level) => level.type);
-}; */
-
-/* export const setLives = (game, lives) => {
-  if (lives < 0) {
-    throw new RangeError(`Can't set negative lives`);
-  }
-  game = Object.assign({}, game);
-  game.lives = lives;
-  return game;
-}; */
-
 export const getScore = (answers) => {
   let score = -1;
 

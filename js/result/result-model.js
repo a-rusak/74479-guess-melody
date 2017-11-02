@@ -18,7 +18,18 @@ const resultData = {
 
 export default class ResultModel {
   constructor(result) {
-    this.result = result; // stat from URL
+    this.result = result;
+
+    // result screen shown not after game or Results page has been reoladed
+    if (typeof ResultModel.type === `undefined`) {
+      // url string with correct param
+      if (result) {
+        ResultModel.type = `WIN`;
+        Object.assign(winData, result);
+      } else {
+        ResultModel.type = `TIME`;
+      }
+    }
   }
 
   getData() {
