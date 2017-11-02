@@ -25,7 +25,6 @@ class GameScreen {
       timeSpent: 20
     };
     const answers = this.model.state.answers;
-    const time = this.model.state.time + answerObj.timeSpent;
     answers.push(answerObj);
     let remainingAttempts = this.model.state.remainingAttempts;
     if (!answerObj.isCorrect) {
@@ -35,7 +34,6 @@ class GameScreen {
     this.model.update({
       answers,
       remainingAttempts,
-      time
     });
   }
 
@@ -43,11 +41,13 @@ class GameScreen {
     if (this.model.isLastLevel() && this.model.getMistakes() < MAX_ERRORS_COUNT) {
       // сделан ответ на последнем уровне и есть запас по ошибкам
       this.model.win();
-      Application.win();
+      // Application.win();
+      Application.showResult(`WIN`);
     } else if (this.model.getMistakes() >= MAX_ERRORS_COUNT) {
       // превышен лимит ошибок
-      this.model.fail();
-      Application.fail();
+      this.model.failOnMistakes();
+      // Application.failOnMistakes();
+      Application.showResult(`TRY`);
     } else {
       this.model.nextLevel();
       this.changeLevel(this.model.getLevelType());
@@ -56,6 +56,22 @@ class GameScreen {
 
   changeLevel(type) {
     this.view.updateLevel(type);
+  }
+
+  tick() {
+    this.model.tick();
+    this.view.updateHeader();
+
+    if (this.model.state.time <= 0) {
+      // Application.failNoMoreTime();
+      Application.showResult(`TIME`);
+    } else {
+      this.timer = setTimeout(() => this.tick(), 1000);
+    }
+  }
+
+  stopTimer() {
+    clearTimeout(this.timer);
   }
 
   answerGenreHandler(evt) {
