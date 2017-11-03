@@ -17,7 +17,23 @@ export default class Application {
     Loader.getLevels().
         then((data) => {
           Application.init(adapt(data));
-          console.log(data);
+          const audioUrls = new Set();
+
+          data.forEach((it) => {
+            switch (it.type) {
+              case `artist`:
+                audioUrls.add(it.src);
+                break;
+              case `genre`:
+                it.answers.forEach((item) => {
+                  audioUrls.add(item.src);
+                });
+                break;
+              default:
+                throw new TypeError(`Unknown question type: ${it.type}`);
+            }
+          });
+          console.log([...audioUrls]);
         });
   }
 
