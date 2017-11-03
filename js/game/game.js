@@ -1,5 +1,5 @@
 import {$on} from '../util';
-import {MAX_ERRORS_COUNT, initialGame, levels} from '../data/game.data';
+import {MAX_ERRORS_COUNT, initialGame} from '../data/game.data';
 import Application from '../application';
 import GameModel from './game-model';
 import ResultModel from '../result/result-model.js';
@@ -7,9 +7,10 @@ import GameView from './game-view';
 import AnswerTimer from '../data/timer';
 
 class GameScreen {
-  constructor(data = levels) {
-    this.model = new GameModel(data);
+  constructor(levelsData) {
+    this.model = new GameModel(levelsData);
     this.view = new GameView(this.model);
+    this.levelsData = levelsData;
     $on(`answer:genre`, (evt) => this.answerGenreHandler(evt));
     $on(`answer:artist`, (evt) => this.answerArtistHandler(evt));
   }
@@ -27,7 +28,7 @@ class GameScreen {
 
   updateState(answer) {
     const answerObj = {
-      isCorrect: answer === levels[this.model.state.level].answer,
+      isCorrect: answer === this.levelsData[this.model.state.level].answer,
       timeSpent: this.AnswerTimer.time
     };
     // console.log(answerObj);
@@ -108,5 +109,5 @@ class GameScreen {
 
 }
 
-export default new GameScreen();
+export default GameScreen;
 

@@ -2,13 +2,12 @@ import {
   getLevel,
   nextLevel,
   tick,
-  levels as levelsData,
   MAX_ERRORS_COUNT,
   LEVELS_COUNT,
 } from '../data/game.data';
 
 export default class GameModel {
-  constructor(data = levelsData) {
+  constructor(data) {
     this.data = data;
   }
 

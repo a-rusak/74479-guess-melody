@@ -1,8 +1,9 @@
 import welcomeScreen from './welcome/welcome';
-import gameScreen from './game/game';
+import GameScreen from './game/game';
 import resultScreen from './result/result';
 import {$on, getJson, getParams} from './util';
 import Loader from './data/loader';
+import adapt from './data/level-adapter';
 
 const ControllerId = {
   WELCOME: ``,
@@ -12,10 +13,18 @@ const ControllerId = {
 
 export default class Application {
 
-  static init() {
+  static prepareDataAndInit() {
+    Loader.getLevels().
+        then((data) => {
+          Application.init(adapt(data));
+          console.log(data);
+        });
+  }
+
+  static init(levelsData) {
     Application.routes = {
       [ControllerId.WELCOME]: welcomeScreen,
-      [ControllerId.GAME]: gameScreen,
+      [ControllerId.GAME]: new GameScreen(levelsData),
       [ControllerId.RESULT]: resultScreen
     };
 
@@ -29,29 +38,10 @@ export default class Application {
 
     $on(`game:start`, Application.showGame);
     $on(`game:replay`, Application.showGame);
-
-    Loader.getLevels(Application.show);
-  }
-
-  static show(data) {
-    const levels = data.map((level) => {
-      switch (level.type) {
-        case `artist`:
-          break;
-        case `genre`:
-          break;
-        default:
-          throw new TypeError(`Unknown question type: ${level.type}`);
-      }
-    });
   }
 
   static changeHash(id, params) {
-    gameScreen.stopTimer();
-    if (gameScreen.AnswerTimer) {
-      gameScreen.AnswerTimer.stop();
-      gameScreen.AnswerTimer.reset();
-    }
+    Application.stopGameTimers(Application.routes.game);
     const controller = Application.routes[id];
     if (controller) {
       if (params) {
@@ -59,6 +49,14 @@ export default class Application {
       } else {
         controller.init();
       }
+    }
+  }
+
+  static stopGameTimers(game) {
+    game.stopTimer();
+    if (game.AnswerTimer) {
+      game.AnswerTimer.stop();
+      game.AnswerTimer.reset();
     }
   }
 
