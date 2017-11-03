@@ -2,6 +2,7 @@ import welcomeScreen from './welcome/welcome';
 import gameScreen from './game/game';
 import resultScreen from './result/result';
 import {$on, getJson, getParams} from './util';
+import Loader from './data/loader';
 
 const ControllerId = {
   WELCOME: ``,
@@ -28,6 +29,21 @@ export default class Application {
 
     $on(`game:start`, Application.showGame);
     $on(`game:replay`, Application.showGame);
+
+    Loader.getLevels(Application.show);
+  }
+
+  static show(data) {
+    const levels = data.map((level) => {
+      switch (level.type) {
+        case `artist`:
+          break;
+        case `genre`:
+          break;
+        default:
+          throw new TypeError(`Unknown question type: ${level.type}`);
+      }
+    });
   }
 
   static changeHash(id, params) {
