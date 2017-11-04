@@ -5,6 +5,7 @@ import GameModel from './game-model';
 import ResultModel from '../result/result-model.js';
 import GameView from './game-view';
 import AnswerTimer from '../data/timer';
+import Loader from '../data/loader';
 
 class GameScreen {
   constructor(levelsData) {
@@ -52,13 +53,17 @@ class GameScreen {
       // сделан ответ на последнем уровне и есть запас по ошибкам
       this.stopTimer();
       ResultModel.type = `WIN`;
-      ResultModel.updateWinData(this.model.state);
-      Application.showResult(ResultModel.getStatistics());
+
+      Loader.getResults()
+          .then((stats) => {
+            ResultModel.updateWinData(this.model.state, stats);
+            Application.showResult(ResultModel.getStatistics());
+          });
 
     } else if (this.model.getMistakes() >= MAX_ERRORS_COUNT) {
       // превышен лимит ошибок
       this.stopTimer();
-      ResultModel.failOnMistakes(this.model.state);
+      ResultModel.failOnMistakes();
       ResultModel.type = `TRY`;
       Application.showResult();
 

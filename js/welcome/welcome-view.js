@@ -35,7 +35,10 @@ export default class WelcomeView extends AbstractView {
   }
 
   showPlayButton() {
-    $$(`.main-play`).classList.remove(`is-hidden`);
+    const button = $$(`.main-play`);
+    if (button !== null) {
+      button.classList.remove(`is-hidden`);
+    }
   }
 }
 

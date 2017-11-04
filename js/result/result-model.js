@@ -2,13 +2,14 @@ import {
   printResult,
   getScore,
   getFastScore,
-  scoreBoard,
   resultWin as winData,
   resultTry as tryData,
   resultTime as timeData,
+  phrases,
   TIME_FOR_GAME,
   MAX_ERRORS_COUNT
 } from '../data/game.data';
+import Loader from '../data/loader';
 
 const resultData = {
   TRY: tryData,
@@ -20,7 +21,7 @@ export default class ResultModel {
   constructor(result) {
     this.result = result;
 
-    // result screen shown not after game or Results page has been reoladed
+    // If result screen shown not after game or Results page has been reloaded
     if (typeof ResultModel.type === `undefined`) {
       // url string with correct param
       if (result) {
@@ -44,12 +45,13 @@ export default class ResultModel {
     ResultModel._type = type;
   }
 
-  static updateWinData(state) {
-    winData.content = printResult(scoreBoard, state);
+  static updateWinData(state, stats) {
+    winData.content = printResult(stats, state);
     winData.score = getScore(state.answers);
     winData.errors = MAX_ERRORS_COUNT - state.remainingAttempts;
     winData.time = TIME_FOR_GAME - state.time;
     winData.fastScore = getFastScore(state.answers);
+    Loader.postResults(winData.score);
   }
 
   static getStatistics() {
@@ -74,7 +76,7 @@ export default class ResultModel {
     };
   }
 
-  static failOnMistakes(state) {
-    tryData.content = printResult(scoreBoard, state);
+  static failOnMistakes() {
+    tryData.content = phrases.noMoreAttempts();
   }
 }
