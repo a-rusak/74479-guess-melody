@@ -13,7 +13,6 @@ export default class GameModel {
 
   update(newState) {
     this.state = Object.assign({}, this.state, newState);
-    // console.log(this.state);
     return this.state;
   }
 

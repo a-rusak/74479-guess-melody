@@ -7,6 +7,7 @@ export default (data) => {
 
     switch (it.type) {
       case `artist`:
+        level.src = it.src;
         level.questions = it.answers.map((item, index) => {
           const question = {
             artist: item.title,

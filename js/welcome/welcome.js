@@ -12,6 +12,10 @@ class WelcomeScreen {
   init() {
     changeView(this.view);
   }
+
+  showPlayButton() {
+    this.view.showPlayButton();
+  }
 }
 
 export default new WelcomeScreen();

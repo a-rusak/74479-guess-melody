@@ -16,7 +16,7 @@ export default class Application {
   static prepareDataAndInit() {
     Loader.getLevels().
         then((data) => {
-          Application.init(adapt(data));
+          Application.init();
           const audioUrls = new Set();
 
           data.forEach((it) => {
@@ -33,15 +33,21 @@ export default class Application {
                 throw new TypeError(`Unknown question type: ${it.type}`);
             }
           });
-          console.log([...audioUrls]);
+          Loader.cacheAudio([...audioUrls], () => Application.onLoad(adapt(data)));
         });
   }
 
-  static init(levelsData) {
+  static onLoad(levelsData) {
+    welcomeScreen.showPlayButton();
     Application.routes = {
-      [ControllerId.WELCOME]: welcomeScreen,
       [ControllerId.GAME]: new GameScreen(levelsData),
       [ControllerId.RESULT]: resultScreen
+    };
+  }
+
+  static init() {
+    Application.routes = {
+      [ControllerId.WELCOME]: welcomeScreen,
     };
 
     const hashChangeHandler = () => {
@@ -69,8 +75,8 @@ export default class Application {
   }
 
   static stopGameTimers(game) {
-    game.stopTimer();
-    if (game.AnswerTimer) {
+    if (game && game.AnswerTimer) {
+      game.stopTimer();
       game.AnswerTimer.stop();
       game.AnswerTimer.reset();
     }

@@ -31,7 +31,6 @@ class GameScreen {
       isCorrect: answer === this.levelsData[this.model.state.level].answer,
       timeSpent: this.AnswerTimer.time
     };
-    // console.log(answerObj);
     const answers = this.model.state.answers;
     answers.push(answerObj);
     let remainingAttempts = this.model.state.remainingAttempts;
