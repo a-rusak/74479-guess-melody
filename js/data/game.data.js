@@ -16,7 +16,7 @@ const label = {
   BUTTON_FAIL: `Попробовать ещё раз`
 };
 
-const phrases = {
+export const phrases = {
   timeIsUp: () => `Время вышло!<br>Вы не успели отгадать все мелодии`,
   noMoreAttempts: () =>
     `У вас закончились все попытки.<br>Ничего, повезёт в следующий раз!`,
@@ -56,8 +56,6 @@ export const resultWin = {
   button: label.BUTTON_WIN,
   isWin: true
 };
-
-export const scoreBoard = [];
 
 export const initialGame = {
   level: -1,
@@ -116,9 +114,9 @@ const getTimeSpent = (answers) => {
   return time;
 };
 
-const getPosition = (statistics, score) => {
+const getPosition = (scoreBoard, score) => {
   // создаём из таблицы результатов, массив объектов: { position, score }
-  const statisticsIndexed = statistics
+  const statisticsIndexed = scoreBoard
       .map((scoreFromStaticstics, position) => ({
         position,
         score: scoreFromStaticstics
@@ -146,20 +144,20 @@ const getPosition = (statistics, score) => {
   return position;
 };
 
-export const printResult = (statistics, game) => {
+export const printResult = (scoreBoard = [], game) => {
   let endGameMessage = ``;
   const score = getScore(game.answers);
   const time = getTimeSpent(game.answers);
 
   if (game.remainingAttempts > 0 && time < TIME_FOR_GAME) {
     // выйгрыш
-    const position = getPosition(statistics, score);
-    statistics.push(score);
-    statistics.sort((a, b) => b - a);
+    const position = getPosition(scoreBoard, score);
+    scoreBoard.push(score);
+    scoreBoard.sort((a, b) => b - a);
 
     resultWin.place = position + 1;
-    resultWin.playersCount = statistics.length;
-    resultWin.betterThan = Math.round((statistics.length - position - 1) * 100 / statistics.length);
+    resultWin.playersCount = scoreBoard.length;
+    resultWin.betterThan = Math.round((scoreBoard.length - position - 1) * 100 / scoreBoard.length);
 
     endGameMessage = phrases.win(resultWin);
 
