@@ -1,4 +1,5 @@
-const URL = `https://es.dump.academy/guess-melody/questions`;
+const URL = `https://es.dump.academy/guess-melody`;
+const NAME_ID = `rusak178490`;
 const CHUNK_SIZE = 4;
 let AUDIO_LOAD_TIMEOUT = 5000; // 5 sec timeframe for load one song
 
@@ -7,8 +8,15 @@ let notLoadedUrls = [];
 
 export default class Loader {
   static getLevels() {
-    return fetch(URL)
-        .then((response) => response.json())
+    return fetch(`${URL}/questions`)
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else if (response.status === 404) {
+            throw new Error(`Данные по адресу ${URL}/questions не найдены.`);
+          }
+          throw new Error(`Неизвестный статус: ${response.status} ${response.statusText}`);
+        })
         .then((data) => {
           return data;
         });
@@ -70,4 +78,43 @@ export default class Loader {
           }
         });
   }
+
+  static getResults() {
+    return fetch(`${URL}/stats/${NAME_ID}`)
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else if (response.status === 404) {
+            return [];
+          }
+          throw new Error(`Неизвестный статус: ${response.status} ${response.statusText}`);
+        })
+        .then((data) => {
+          let stats = [];
+          for (let it of data) {
+            if (it.stats) {
+              stats.push(it.stats);
+            }
+          }
+          return stats;
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+  }
+
+  static postResults(data) {
+    const requestSettings = {
+      body: JSON.stringify({
+        time: +new Date(),
+        stats: data
+      }),
+      headers: {
+        'Content-Type': `application/json`
+      },
+      method: `POST`
+    };
+    return fetch(`${URL}/stats/${NAME_ID}`, requestSettings);
+  }
+
 }
