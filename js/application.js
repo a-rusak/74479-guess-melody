@@ -1,7 +1,9 @@
 import welcomeScreen from './welcome/welcome';
-import gameScreen from './game/game';
+import GameScreen from './game/game';
 import resultScreen from './result/result';
 import {$on, getJson, getParams} from './util';
+import Loader from './data/loader';
+import adapt from './data/level-adapter';
 
 const ControllerId = {
   WELCOME: ``,
@@ -11,11 +13,41 @@ const ControllerId = {
 
 export default class Application {
 
+  static prepareDataAndInit() {
+    Loader.getLevels().
+        then((data) => {
+          Application.init();
+          const audioUrls = new Set();
+
+          data.forEach((it) => {
+            switch (it.type) {
+              case `artist`:
+                audioUrls.add(it.src);
+                break;
+              case `genre`:
+                it.answers.forEach((item) => {
+                  audioUrls.add(item.src);
+                });
+                break;
+              default:
+                throw new TypeError(`Unknown question type: ${it.type}`);
+            }
+          });
+          Loader.cacheAudio([...audioUrls], () => Application.onLoad(adapt(data)));
+        });
+  }
+
+  static onLoad(levelsData) {
+    welcomeScreen.showPlayButton();
+    Application.routes = {
+      [ControllerId.GAME]: new GameScreen(levelsData),
+      [ControllerId.RESULT]: resultScreen
+    };
+  }
+
   static init() {
     Application.routes = {
       [ControllerId.WELCOME]: welcomeScreen,
-      [ControllerId.GAME]: gameScreen,
-      [ControllerId.RESULT]: resultScreen
     };
 
     const hashChangeHandler = () => {
@@ -31,6 +63,7 @@ export default class Application {
   }
 
   static changeHash(id, params) {
+    Application.stopGameTimers(Application.routes.game);
     const controller = Application.routes[id];
     if (controller) {
       if (params) {
@@ -38,6 +71,14 @@ export default class Application {
       } else {
         controller.init();
       }
+    }
+  }
+
+  static stopGameTimers(game) {
+    if (game && game.AnswerTimer) {
+      game.stopTimer();
+      game.AnswerTimer.stop();
+      game.AnswerTimer.reset();
     }
   }
 

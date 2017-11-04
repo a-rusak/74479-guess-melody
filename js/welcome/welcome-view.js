@@ -12,7 +12,7 @@ export default class WelcomeView extends AbstractView {
     return `
 <section class="main main--welcome">
   <section class="logo" title="${name}"><h1>${name}</h1></section>
-  <button class="main-play">${button}</button>
+  <button class="main-play is-hidden">${button}</button>
   <h2 class="title main-title">${title}</h2>
   <p class="text main-text">${rules
       .reduce((str, it, index, arr) => {
@@ -32,6 +32,10 @@ export default class WelcomeView extends AbstractView {
   }
 
   onStart() {
+  }
+
+  showPlayButton() {
+    $$(`.main-play`).classList.remove(`is-hidden`);
   }
 }
 

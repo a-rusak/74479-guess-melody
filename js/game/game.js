@@ -1,5 +1,5 @@
 import {$on} from '../util';
-import {MAX_ERRORS_COUNT, initialGame, levels} from '../data/game.data';
+import {MAX_ERRORS_COUNT, initialGame} from '../data/game.data';
 import Application from '../application';
 import GameModel from './game-model';
 import ResultModel from '../result/result-model.js';
@@ -7,16 +7,18 @@ import GameView from './game-view';
 import AnswerTimer from '../data/timer';
 
 class GameScreen {
-  constructor(data = levels) {
-    this.model = new GameModel(data);
+  constructor(levelsData) {
+    this.model = new GameModel(levelsData);
     this.view = new GameView(this.model);
+    this.levelsData = levelsData;
     $on(`answer:genre`, (evt) => this.answerGenreHandler(evt));
     $on(`answer:artist`, (evt) => this.answerArtistHandler(evt));
   }
 
   init(state = initialGame) {
-    AnswerTimer.stop();
-    AnswerTimer.reset();
+    this.AnswerTimer = AnswerTimer;
+    this.AnswerTimer.stop();
+    this.AnswerTimer.reset();
     this.model.resetAnswers(state);
     this.model.update(state);
     this.model.nextLevel();
@@ -26,10 +28,9 @@ class GameScreen {
 
   updateState(answer) {
     const answerObj = {
-      isCorrect: answer === levels[this.model.state.level].answer,
-      timeSpent: AnswerTimer.time
+      isCorrect: answer === this.levelsData[this.model.state.level].answer,
+      timeSpent: this.AnswerTimer.time
     };
-    // console.log(answerObj);
     const answers = this.model.state.answers;
     answers.push(answerObj);
     let remainingAttempts = this.model.state.remainingAttempts;
@@ -44,8 +45,8 @@ class GameScreen {
   }
 
   onAnswer() {
-    AnswerTimer.stop();
-    AnswerTimer.reset();
+    this.AnswerTimer.stop();
+    this.AnswerTimer.reset();
 
     if (this.model.isLastLevel() && this.model.getMistakes() < MAX_ERRORS_COUNT) {
       // сделан ответ на последнем уровне и есть запас по ошибкам
@@ -69,7 +70,7 @@ class GameScreen {
 
   changeLevel(type) {
     this.view.updateLevel(type);
-    AnswerTimer.start();
+    this.AnswerTimer.start();
   }
 
   tick() {
@@ -107,5 +108,5 @@ class GameScreen {
 
 }
 
-export default new GameScreen();
+export default GameScreen;
 
