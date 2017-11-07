@@ -15,7 +15,7 @@ export default class LevelGenreView extends AbstractView {
         const n = index++;
         const itemTemplate = `
 <div class="genre-answer">
-  <div class="player-wrapper">
+  <!--div class="player-wrapper">
     <div class="player">
       <audio src="${it.src}"></audio>
       <button class="player-control player-control--play"></button>
@@ -23,7 +23,7 @@ export default class LevelGenreView extends AbstractView {
         <span class="player-status"></span>
       </div>
     </div>
-  </div>
+  </div-->
   <input type="checkbox" name="answer" value="answer-${n}" id="a-${n}">
   <label class="genre-answer-check" for="a-${n}"></label>
 </div>`;
@@ -67,5 +67,9 @@ export default class LevelGenreView extends AbstractView {
     evt.preventDefault();
     const answers = [...evt.target.form.elements.answer];
     $trigger(`answer:genre`, answers);
+  }
+
+  appendAudioElements(data) {
+    console.log(data);
   }
 }

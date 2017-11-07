@@ -42,9 +42,11 @@ export default class GameView extends AbstractView {
   }
 
   updateLevel(type) {
-    this.level = this.view[type](this.model.getCurrentLevel());
-    this.bindAudioHandler();
+    const levelData = this.model.getCurrentLevel();
+    this.level = this.view[type](levelData);
     changeView(this.level);
+    this.level.appendAudioElements(levelData);
+    this.bindAudioHandler();
     this.updateHeader();
   }
 

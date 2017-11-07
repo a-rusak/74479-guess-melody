@@ -12,41 +12,13 @@ const ControllerId = {
 };
 
 export default class Application {
-
-  static prepareDataAndInit() {
-    Loader.getLevels().
-        then((data) => {
-          Application.init(adapt(data));
-          const audioUrls = new Set();
-
-          data.forEach((it) => {
-            switch (it.type) {
-              case `artist`:
-                audioUrls.add(it.src);
-                break;
-              case `genre`:
-                it.answers.forEach((item) => {
-                  audioUrls.add(item.src);
-                });
-                break;
-              default:
-                throw new TypeError(`Unknown question type: ${it.type}`);
-            }
-          });
-          Loader.cacheAudio([...audioUrls], () => Application.onLoad());
-        });
-  }
-
-  static onLoad() {
-    welcomeScreen.showPlayButton();
-  }
-
   static init(levelsData) {
     Application.routes = {
       [ControllerId.WELCOME]: welcomeScreen,
       [ControllerId.GAME]: new GameScreen(levelsData),
       [ControllerId.RESULT]: resultScreen
     };
+    Application.audioUrls = new Set();
 
     const hashChangeHandler = () => {
       const hashValue = location.hash.replace(`#`, ``);
@@ -58,6 +30,44 @@ export default class Application {
 
     $on(`game:start`, Application.showGame);
     $on(`game:replay`, Application.showGame);
+  }
+
+  static prepareDataAndInit() {
+    Loader.getLevels().
+        then((data) => {
+          Application.init(adapt(data));
+          Application.fillAudioUrls(data);
+          Loader.cacheAudio([...Application.audioUrls], () => Application.onCacheLoaded());
+        });
+  }
+
+  static fillAudioUrls(data) {
+    data.forEach((it) => {
+      switch (it.type) {
+        case `artist`:
+          Application.audioUrls.add(it.src);
+          break;
+        case `genre`:
+          it.answers.forEach((item) => {
+            Application.audioUrls.add(item.src);
+          });
+          break;
+        default:
+          throw new TypeError(`Unknown question type: ${it.type}`);
+      }
+    });
+  }
+
+  static createAudioElements() {
+
+  }
+
+  static onCacheLoaded() {
+    welcomeScreen.showPlayButton();
+  }
+
+  static updateProgress(loaded, total) {
+    welcomeScreen.updateProgress(loaded, total);
   }
 
   static changeHash(id, params) {

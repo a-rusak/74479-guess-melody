@@ -1,5 +1,6 @@
 import AbstractView from '../../view';
-import {$on, $trigger} from '../../util';
+import audioModel from '../../audio/audio-model';
+import {$$, $on, $trigger} from '../../util';
 
 export default class LevelArtistView extends AbstractView {
   constructor(level) {
@@ -30,15 +31,7 @@ export default class LevelArtistView extends AbstractView {
 <section class="main main--level main--level-genre">
   <div class="main-wrap">
     <h2 class="title main-title">${title}</h2>
-    <div class="player-wrapper">
-      <div class="player">
-        <audio src="${src}" loop autoplay></audio>
-        <button class="player-control player-control--pause"></button>
-        <div class="player-track">
-          <span class="player-status"></span>
-        </div>
-      </div>
-    </div>
+    <div class="player-wrapper"></div>
     <form class="main-list">
 
       ${questionsTemplate(questions)}
@@ -56,5 +49,9 @@ export default class LevelArtistView extends AbstractView {
         $trigger(`answer:artist`, answer);
       }, button);
     });
+  }
+  appendAudioElements(data) {
+    const clonedAudioElement = audioModel.getElement(data.src).cloneNode(true);
+    $$(`.player-wrapper`).appendChild(clonedAudioElement);
   }
 }
