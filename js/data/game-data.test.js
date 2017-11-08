@@ -1,11 +1,12 @@
 import assert from 'assert';
+
 import {
   LEVELS_COUNT,
   MAX_ERRORS_COUNT,
   getScore,
   printResult,
-  Timer
 } from './game.data';
+import Timer from './timer';
 import {
   games,
   statisctics,
@@ -45,24 +46,47 @@ describe(`Результаты игр`, () => {
   });
 });
 
-const TIME = 4;
-const timer = new Timer(TIME);
+describe(`Таймер`, () => {
 
-describe(`Таймер в 5 щелчков`, () => {
-  for (let t of [4, 3, 2, 1, 0]) {
-    makeTest(t);
-  }
-  function makeTest(t) {
-    it(`Щелчок №${TIME + 1 - t}: `, () => {
-      assert.equal(t, timer.time);
-      if (t > 0) {
-        assert(!timer.isFinished);
-      }
-      if (t === 0) {
-        assert(timer.isFinished);
-      }
-      timer.tick();
-    });
-  }
+  beforeEach((done) => {
+    Timer.stop();
+    Timer.reset();
+    done();
+  });
+  afterEach(() => {
+    Timer.stop();
+    Timer.reset();
+  });
+
+  it(`сброшен`, () => {
+    assert.strictEqual(-1, Timer.time);
+  });
+
+  it(`стартовал`, () => {
+    Timer.start();
+    assert.strictEqual(0, Timer.time);
+  });
 });
 
+describe(`Таймер`, function () {
+  this.timeout(3500); // eslint-disable-line no-invalid-this
+
+  before((done) => {
+    Timer.stop();
+    Timer.reset();
+    Timer.start();
+
+    setTimeout(() => {
+      done();
+    }, 3030);
+  });
+
+  it(`отсчитал три секунды`, () => {
+    assert.strictEqual(3, Timer.time);
+  });
+
+  after(() => {
+    Timer.stop();
+    Timer.reset();
+  });
+});

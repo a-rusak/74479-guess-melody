@@ -3,7 +3,7 @@ import GameScreen from './game/game';
 import resultScreen from './result/result';
 import {$on, getJson, getParams} from './util';
 import Loader from './data/loader';
-import adapt from './data/level-adapter';
+import adaptLoadedData from './data/adapt-loaded-data';
 
 const ControllerId = {
   WELCOME: ``,
@@ -13,10 +13,10 @@ const ControllerId = {
 
 export default class Application {
 
-  static prepareDataAndInit() {
+  prepareDataAndInit() {
     Loader.getLevels().
         then((data) => {
-          Application.init(adapt(data));
+          this.init(adaptLoadedData(data));
           const audioUrls = new Set();
 
           data.forEach((it) => {
@@ -33,6 +33,7 @@ export default class Application {
                 throw new TypeError(`Unknown question type: ${it.type}`);
             }
           });
+          Application.audioTotalSize = audioUrls.size;
           Loader.cacheAudio([...audioUrls], () => Application.onLoad());
         });
   }
@@ -41,8 +42,8 @@ export default class Application {
     welcomeScreen.showPlayButton();
   }
 
-  static init(levelsData) {
-    Application.routes = {
+  init(levelsData) {
+    this.routes = {
       [ControllerId.WELCOME]: welcomeScreen,
       [ControllerId.GAME]: new GameScreen(levelsData),
       [ControllerId.RESULT]: resultScreen
@@ -51,7 +52,7 @@ export default class Application {
     const hashChangeHandler = () => {
       const hashValue = location.hash.replace(`#`, ``);
       const [id, params] = hashValue.split(`?`);
-      Application.changeHash(id, params);
+      this.changeHash(id, params);
     };
     window.onhashchange = hashChangeHandler;
     hashChangeHandler();
@@ -60,9 +61,9 @@ export default class Application {
     $on(`game:replay`, Application.showGame);
   }
 
-  static changeHash(id, params) {
-    Application.stopGameTimers(Application.routes.game);
-    const controller = Application.routes[id];
+  changeHash(id, params) {
+    Application.stopGameTimers(this.routes.game);
+    const controller = this.routes[id];
     if (controller) {
       if (params) {
         controller.init(getJson(params));
@@ -92,4 +93,9 @@ export default class Application {
     const urlParams = statistics ? getParams(statistics) : ``;
     location.hash = `${ControllerId.RESULT}?${urlParams}`;
   }
+
+  static updateProgress(loaded) {
+    welcomeScreen.updateProgress(loaded, Application.audioTotalSize);
+  }
+
 }
