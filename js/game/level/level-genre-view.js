@@ -10,24 +10,10 @@ export default class LevelGenreView extends AbstractView {
   get template() {
     const {title, questions} = this.level;
 
-    return `
-<section class="main main--level main--level-genre">
-  <div class="main-wrap">
-    <h2 class="title">${title}</h2>
-    <form class="genre">
-
-      ${this.getQuestionsTemplate(questions)}
-
-      <button class="genre-answer-send" type="submit" disabled>Ответить</button>
-    </form>
-  </div>
-</section>`.trim();
-  }
-
-  getQuestionsTemplate(data) {
-    const template = data.reduce((string, it, index) => {
-      const n = index++;
-      const itemTemplate = `
+    const questionsTemplate = (data) => {
+      return data.reduce((string, it, index) => {
+        const n = index++;
+        const itemTemplate = `
 <div class="genre-answer">
   <div class="player-wrapper">
     <div class="player">
@@ -41,9 +27,22 @@ export default class LevelGenreView extends AbstractView {
   <input type="checkbox" name="answer" value="answer-${n}" id="a-${n}">
   <label class="genre-answer-check" for="a-${n}"></label>
 </div>`;
-      return string + itemTemplate;
-    }, ``);
-    return template;
+        return string + itemTemplate;
+      }, ``);
+    };
+
+    return `
+<section class="main main--level main--level-genre">
+  <div class="main-wrap">
+    <h2 class="title">${title}</h2>
+    <form class="genre">
+
+      ${questionsTemplate(questions)}
+
+      <button class="genre-answer-send" type="submit" disabled>Ответить</button>
+    </form>
+  </div>
+</section>`.trim();
   }
 
   bind() {

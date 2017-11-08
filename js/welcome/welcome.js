@@ -16,11 +16,6 @@ class WelcomeScreen {
   showPlayButton() {
     this.view.showPlayButton();
   }
-
-  updateProgress(loaded, total) {
-    this.view.updateProgress(loaded, total);
-  }
-
 }
 
 export default new WelcomeScreen();

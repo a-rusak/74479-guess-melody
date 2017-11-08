@@ -9,6 +9,23 @@ export default class LevelArtistView extends AbstractView {
 
   get template() {
     const {title, questions, src} = this.level;
+
+    const questionsTemplate = (data) => {
+      return data.reduce((string, it, index) => {
+        const n = index++;
+        const itemTemplate = `
+<div class="main-answer-wrapper">
+  <input class="main-answer-r" type="radio" id="answer-${n}" name="answer" value="val-${n}"/>
+  <label class="main-answer" for="answer-${n}">
+    <img class="main-answer-preview" src="${it.image}"
+        alt="${it.artist}" width="134" height="134">
+    ${it.artist}
+  </label>
+</div>`.trim();
+        return string + itemTemplate;
+      }, ``);
+    };
+
     return `
 <section class="main main--level main--level-genre">
   <div class="main-wrap">
@@ -24,28 +41,11 @@ export default class LevelArtistView extends AbstractView {
     </div>
     <form class="main-list">
 
-      ${this.getQuestionsTemplate(questions)}
+      ${questionsTemplate(questions)}
 
     </form>
   </div>
 </section>`.trim();
-  }
-
-  getQuestionsTemplate(data) {
-    const template = data.reduce((string, it, index) => {
-      const n = index++;
-      const itemTemplate = `
-<div class="main-answer-wrapper">
-  <input class="main-answer-r" type="radio" id="answer-${n}" name="answer" value="val-${n}"/>
-  <label class="main-answer" for="answer-${n}">
-    <img class="main-answer-preview" src="${it.image}"
-      alt="${it.artist}" width="134" height="134">
-    ${it.artist}
-  </label>
-</div>`;
-      return string + itemTemplate;
-    }, ``);
-    return template;
   }
 
   bind() {

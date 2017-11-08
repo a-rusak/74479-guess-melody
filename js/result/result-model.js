@@ -5,7 +5,7 @@ import {
   resultWin as winData,
   resultTry as tryData,
   resultTime as timeData,
-  phrase,
+  phrases,
   TIME_FOR_GAME,
   MAX_ERRORS_COUNT
 } from '../data/game.data';
@@ -77,6 +77,6 @@ export default class ResultModel {
   }
 
   static failOnMistakes() {
-    tryData.content = phrase.noMoreAttempts();
+    tryData.content = phrases.noMoreAttempts();
   }
 }

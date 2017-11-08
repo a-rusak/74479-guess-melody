@@ -4,7 +4,7 @@ import LevelGenreView from './level/level-genre-view';
 import LevelArtistView from './level/level-artist-view';
 import {changeView, $$, $on} from '../util';
 
-const Audio = {
+const audio = {
   BUTTON: `player-control`,
   PLAY: `player-control--pause`,
   PAUSE: `player-control--play`
@@ -25,7 +25,7 @@ export default class GameView extends AbstractView {
   }
 
   bindAudioHandler() {
-    [...this.level.element.querySelectorAll(`.${Audio.BUTTON}`)].forEach((button) => {
+    [...this.level.element.querySelectorAll(`.${audio.BUTTON}`)].forEach((button) => {
       $on(`click`, (evt) => this.audioHandler(evt), button);
     });
   }
@@ -54,27 +54,27 @@ export default class GameView extends AbstractView {
     if (headerElement !== null) {
       headerElement.remove();
     }
-    $$(`section.main`).insertBefore(header.element, $$(`.main-wrap`));
+    $$(`section.main`).prepend(header.element);
   }
 
   audioHandler(evt) {
     if (evt && evt.target) {
       evt.preventDefault();
       const el = evt.target;
-      if (el.classList.contains(Audio.PAUSE)) {
+      if (el.classList.contains(audio.PAUSE)) {
         // play
-        [...this.level.element.querySelectorAll(`.${Audio.PLAY}`)].forEach((button) => {
-          button.classList.remove(Audio.PLAY);
-          button.classList.add(Audio.PAUSE);
+        [...this.level.element.querySelectorAll(`.${audio.PLAY}`)].forEach((button) => {
+          button.classList.remove(audio.PLAY);
+          button.classList.add(audio.PAUSE);
           button.previousElementSibling.pause();
         });
-        el.classList.remove(Audio.PAUSE);
-        el.classList.add(Audio.PLAY);
+        el.classList.remove(audio.PAUSE);
+        el.classList.add(audio.PLAY);
         el.previousElementSibling.play();
       } else {
         // pause
-        el.classList.remove(Audio.PLAY);
-        el.classList.add(Audio.PAUSE);
+        el.classList.remove(audio.PLAY);
+        el.classList.add(audio.PAUSE);
         el.previousElementSibling.pause();
       }
     }

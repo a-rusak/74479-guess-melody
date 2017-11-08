@@ -3,7 +3,7 @@ export const FAST_ANSWER_PERIOD = 30;
 export const MAX_ERRORS_COUNT = 4;
 export const TIME_FOR_GAME = 60 * 5 + 1; // 5 minutes + 1 second
 
-const Label = {
+const label = {
   GAME: `Угадай мелодию`,
 
   TITLE_WIN: `Вы настоящий меломан!`,
@@ -16,7 +16,7 @@ const Label = {
   BUTTON_FAIL: `Попробовать ещё раз`
 };
 
-export const phrase = {
+export const phrases = {
   timeIsUp: () => `Время вышло!<br>Вы не успели отгадать все мелодии`,
   noMoreAttempts: () =>
     `У вас закончились все попытки.<br>Ничего, повезёт в следующий раз!`,
@@ -25,35 +25,35 @@ export const phrase = {
 };
 
 export const welcome = {
-  name: Label.GAME,
-  title: Label.TITLE_WELCOME,
+  name: label.GAME,
+  title: label.TITLE_WELCOME,
   rules: [
     `Правила просты&nbsp;— за&nbsp;5 минут ответить на все вопросы.`,
     `Ошибиться можно 3 раза.`,
     `Удачи!`
   ],
-  button: Label.BUTTON_WELCOME
+  button: label.BUTTON_WELCOME
 };
 
 export const resultTry = {
-  name: Label.GAME,
-  title: Label.TITLE_FAIL_TRY,
-  button: Label.BUTTON_FAIL,
+  name: label.GAME,
+  title: label.TITLE_FAIL_TRY,
+  button: label.BUTTON_FAIL,
   isWin: false,
 };
 
 export const resultTime = {
-  name: Label.GAME,
-  title: Label.TITLE_FAIL_TIME,
-  button: Label.BUTTON_FAIL,
-  content: phrase.timeIsUp(),
+  name: label.GAME,
+  title: label.TITLE_FAIL_TIME,
+  button: label.BUTTON_FAIL,
+  content: phrases.timeIsUp(),
   isWin: false
 };
 
 export const resultWin = {
-  name: Label.GAME,
-  title: Label.TITLE_WIN,
-  button: Label.BUTTON_WIN,
+  name: label.GAME,
+  title: label.TITLE_WIN,
+  button: label.BUTTON_WIN,
   isWin: true
 };
 
@@ -72,7 +72,7 @@ export const tick = (game) => {
 
 export const getLevel = (index, allLevels) => allLevels[index];
 
-export const showNextLevel = (state, allLevels) => {
+export const nextLevel = (state, allLevels) => {
   const index = state.level + 1;
   if (!getLevel(index, allLevels)) {
     throw new RangeError(`Can't find level ${index}`);
@@ -82,7 +82,7 @@ export const showNextLevel = (state, allLevels) => {
 };
 
 export const startGame = () => {
-  showNextLevel();
+  nextLevel();
 };
 
 export const getScore = (answers) => {
@@ -159,12 +159,34 @@ export const printResult = (scoreBoard = [], game) => {
     resultWin.playersCount = scoreBoard.length;
     resultWin.betterThan = Math.round((scoreBoard.length - position - 1) * 100 / scoreBoard.length);
 
-    endGameMessage = phrase.win(resultWin);
+    endGameMessage = phrases.win(resultWin);
 
   } else {
     // проигрыш
-    endGameMessage = (time > TIME_FOR_GAME) ? phrase.timeIsUp() : phrase.noMoreAttempts();
+    endGameMessage = (time > TIME_FOR_GAME) ? phrases.timeIsUp() : phrases.noMoreAttempts();
   }
 
   return endGameMessage;
 };
+
+export class Timer {
+  constructor(time) {
+    this.time = time;
+  }
+
+  get isFinished() {
+    return this.time < 1;
+  }
+
+  get time() {
+    return this._time;
+  }
+
+  set time(value) {
+    this._time = value;
+  }
+
+  tick() {
+    this.time--;
+  }
+}

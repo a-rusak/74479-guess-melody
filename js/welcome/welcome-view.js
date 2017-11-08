@@ -12,7 +12,6 @@ export default class WelcomeView extends AbstractView {
     return `
 <section class="main main--welcome">
   <section class="logo" title="${name}"><h1>${name}</h1></section>
-  <progress class="preload-progress"></progress>
   <button class="main-play is-hidden">${button}</button>
   <h2 class="title main-title">${title}</h2>
   <p class="text main-text">${rules
@@ -40,19 +39,6 @@ export default class WelcomeView extends AbstractView {
     if (button !== null) {
       button.classList.remove(`is-hidden`);
     }
-    const progressElement = $$(`.preload-progress`);
-    if (progressElement) {
-      progressElement.classList.add(`is-hidden`);
-    }
   }
-
-  updateProgress(loaded, total) {
-    const progressElement = $$(`.preload-progress`);
-    if (progressElement) {
-      $$(`.preload-progress`).max = total;
-      $$(`.preload-progress`).value = loaded;
-    }
-  }
-
 }
 
