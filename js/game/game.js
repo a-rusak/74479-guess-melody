@@ -22,7 +22,7 @@ class GameScreen {
     this.AnswerTimer.reset();
     this.model.resetAnswers(state);
     this.model.update(state);
-    this.model.nextLevel();
+    this.model.showNextLevel();
     this.changeLevel(this.model.getLevelType());
     this.tick();
   }
@@ -68,7 +68,7 @@ class GameScreen {
       Application.showResult();
 
     } else {
-      this.model.nextLevel();
+      this.model.showNextLevel();
       this.changeLevel(this.model.getLevelType());
     }
   }

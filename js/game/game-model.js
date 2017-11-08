@@ -1,6 +1,6 @@
 import {
   getLevel,
-  nextLevel,
+  showNextLevel,
   tick,
   MAX_ERRORS_COUNT,
   LEVELS_COUNT,
@@ -24,8 +24,8 @@ export default class GameModel {
     return getLevel(this.state.level, this.data);
   }
 
-  nextLevel() {
-    this.update(nextLevel(this.state, this.data));
+  showNextLevel() {
+    this.update(showNextLevel(this.state, this.data));
   }
 
   tick() {

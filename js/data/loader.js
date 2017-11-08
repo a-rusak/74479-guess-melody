@@ -1,10 +1,12 @@
+import Application from '../application';
 const URL = `https://es.dump.academy/guess-melody`;
 const NAME_ID = `rusak178490`;
 const CHUNK_SIZE = 4;
-let AUDIO_LOAD_TIMEOUT = 5000; // 5 sec timeframe for load one song
+let AUDIO_LOAD_TIMEOUT = 5000; // 5 sec initial timeframe to load one chunk
 
 let timeout;
 let notLoadedUrls = [];
+let loadedAudioQuantity = 0;
 
 export default class Loader {
   static getLevels() {
@@ -31,6 +33,8 @@ export default class Loader {
                 audio.addEventListener(`canplaythrough`, () => resolve(url), false);
                 audio.src = url;
                 timeout = setTimeout(() => reject(url), AUDIO_LOAD_TIMEOUT);
+                loadedAudioQuantity++;
+                Application.updateProgress(loadedAudioQuantity - CHUNK_SIZE);
               });
             }
         )
@@ -74,6 +78,7 @@ export default class Loader {
             Loader.cacheAudio(notLoadedUrls, cb);
             notLoadedUrls = [];
           } else {
+            Application.updateProgress(loadedAudioQuantity + CHUNK_SIZE);
             cb();
           }
         });
