@@ -51,7 +51,8 @@ export default class LevelArtistView extends AbstractView {
     });
   }
   appendAudioElements(data) {
-    const clonedAudioElement = audioModel.getElement(data.src).cloneNode(true);
-    $$(`.player-wrapper`).appendChild(clonedAudioElement);
+    // const clonedAudioElement = audioModel.getElement(data.src).cloneNode(true);
+    // $$(`.player-wrapper`).appendChild(clonedAudioElement);
+    $$(`.player-wrapper`).appendChild(audioModel.getElement(data.src));
   }
 }

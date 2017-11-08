@@ -21,4 +21,9 @@ export default class AudioView extends AbstractView {
   get audioElement() {
     return $$(`audio`, this.element);
   }
+
+  appendToHolder(el) {
+    $$(`.audioHolder`).append(el);
+  }
+
 }
