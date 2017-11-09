@@ -69,16 +69,16 @@ describe(`Таймер`, () => {
 });
 
 describe(`Таймер`, function () {
-  this.timeout(3500); // eslint-disable-line no-invalid-this
-
   before((done) => {
     Timer.stop();
     Timer.reset();
     Timer.start();
 
-    setTimeout(() => {
-      done();
-    }, 3030);
+    Timer.tick();
+    Timer.tick();
+    Timer.tick();
+
+    done();
   });
 
   it(`отсчитал три секунды`, () => {

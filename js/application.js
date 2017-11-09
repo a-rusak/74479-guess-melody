@@ -93,7 +93,7 @@ export default class Application {
     const urlParams = statistics ? getParams(statistics) : ``;
     location.hash = `${ControllerId.RESULT}?${urlParams}`;
   }
-  // updateProgress
+
   static updateProgress(loaded) {
     welcomeScreen.updateProgress(loaded, Application.audioTotalSize);
   }
